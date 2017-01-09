@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/AdamJacobMuller/home-api/api"
+	"github.com/AdamJacobMuller/home-api/api/server"
 	"github.com/AdamJacobMuller/home-api/providers/homeseer"
 )
 
 func main() {
 	controller := homeseer.NewHomeseerController("http://homeseer.adam.gs")
-	api := api.NewAPIServer()
+	api := apiserver.NewAPIServer()
 	api.HSController = controller
 
 	api.Serve()
