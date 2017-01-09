@@ -2,8 +2,8 @@ package apiserver
 
 import (
 	"encoding/json"
+	"github.com/AdamJacobMuller/home-api/api/controller"
 	"github.com/AdamJacobMuller/home-api/api/models"
-	"github.com/AdamJacobMuller/home-api/providers/homeseer"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
 	"github.com/meatballhat/negroni-logrus"
@@ -13,8 +13,8 @@ import (
 )
 
 type APIServer struct {
-	Server       *http.Server
-	HSController *homeseer.HSController
+	Server     *http.Server
+	Controller *apicontroller.APIController
 }
 
 func (a *APIServer) readAndUnmarshalJson(r *http.Request, object interface{}) bool {
@@ -46,12 +46,12 @@ func (a *APIServer) marshalAndWriteJson(w http.ResponseWriter, object interface{
 func (a *APIServer) SetChildDevicesValue(w http.ResponseWriter, r *http.Request) {
 	cr := &apimodels.ControlRequest{}
 	a.readAndUnmarshalJson(r, cr)
-	a.HSController.SetChildDevicesValue(cr.Match, cr.Value)
+	a.Controller.SetChildDevicesValue(cr.Match, cr.Value)
 }
 func (a *APIServer) SetDevicesValue(w http.ResponseWriter, r *http.Request) {
 	cr := &apimodels.ControlRequest{}
 	a.readAndUnmarshalJson(r, cr)
-	a.HSController.SetDevicesValue(cr.Match, cr.Value)
+	a.Controller.SetDevicesValue(cr.Match, cr.Value)
 }
 func (a *APIServer) Serve() {
 	err := a.Server.ListenAndServe()
