@@ -1,7 +1,8 @@
-package api
+package apiserver
 
 import (
 	"encoding/json"
+	"github.com/AdamJacobMuller/home-api/api/models"
 	"github.com/AdamJacobMuller/home-api/providers/homeseer"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
@@ -10,11 +11,6 @@ import (
 	"io/ioutil"
 	"net/http"
 )
-
-type ControlRequest struct {
-	Match homeseer.HSLookup `json:"match"`
-	Value float64           `json:"value"`
-}
 
 type APIServer struct {
 	Server       *http.Server
@@ -48,12 +44,12 @@ func (a *APIServer) marshalAndWriteJson(w http.ResponseWriter, object interface{
 	return true
 }
 func (a *APIServer) SetChildDevicesValue(w http.ResponseWriter, r *http.Request) {
-	cr := &ControlRequest{}
+	cr := &apimodels.ControlRequest{}
 	a.readAndUnmarshalJson(r, cr)
 	a.HSController.SetChildDevicesValue(cr.Match, cr.Value)
 }
 func (a *APIServer) SetDevicesValue(w http.ResponseWriter, r *http.Request) {
-	cr := &ControlRequest{}
+	cr := &apimodels.ControlRequest{}
 	a.readAndUnmarshalJson(r, cr)
 	a.HSController.SetDevicesValue(cr.Match, cr.Value)
 }
