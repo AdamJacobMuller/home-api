@@ -3,6 +3,7 @@ package homeseer
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/AdamJacobMuller/home-api/api/models"
 	log "github.com/Sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
@@ -63,8 +64,6 @@ type HSController struct {
 	Devices        []*HSDevice
 }
 
-type HSLookup map[string]interface{}
-
 func (h *HSDevice) SetValue(value float64) bool {
 	url := fmt.Sprintf("JSON?request=controldevicebyvalue&ref=%d&value=%f", h.ID, value)
 	json_devices := &JD_HSDevices{}
@@ -82,9 +81,9 @@ func (h *HSDevice) SetValue(value float64) bool {
 		return false
 	}
 }
-func (h *HSDevice) Matches(find HSLookup) bool {
+func (h *HSDevice) Matches(find apimodels.Match) bool {
 	var sVal string
-	var lVal HSLookup
+	var lVal apimodels.Match
 	var ok bool
 	sVal, ok = find["LocationOne"].(string)
 	if ok {
@@ -110,7 +109,7 @@ func (h *HSDevice) Matches(find HSLookup) bool {
 			return false
 		}
 	}
-	lVal, ok = find["Child"].(HSLookup)
+	lVal, ok = find["Child"].(apimodels.Match)
 	if ok {
 		var matched bool
 		matched = false
@@ -145,7 +144,7 @@ func (h *HSResult) Add(device *HSDevice) {
 	h.Devices = append(h.Devices, device)
 }
 
-func (h *HSController) SetChildDevicesValue(find HSLookup, value float64) bool {
+func (h *HSController) SetChildDevicesValue(find apimodels.Match, value float64) bool {
 	devices, ok := h.GetChildDevices(find)
 	if ok {
 		devices.SetValue(value)
@@ -153,7 +152,7 @@ func (h *HSController) SetChildDevicesValue(find HSLookup, value float64) bool {
 	}
 	return false
 }
-func (h *HSController) SetDevicesValue(find HSLookup, value float64) bool {
+func (h *HSController) SetDevicesValue(find apimodels.Match, value float64) bool {
 	devices, ok := h.GetDevices(find)
 	if ok {
 		devices.SetValue(value)
@@ -161,7 +160,7 @@ func (h *HSController) SetDevicesValue(find HSLookup, value float64) bool {
 	}
 	return false
 }
-func (h *HSController) GetDevices(find HSLookup) (*HSResult, bool) {
+func (h *HSController) GetDevices(find apimodels.Match) (*HSResult, bool) {
 	result := &HSResult{}
 	for _, device := range h.Devices {
 		if device.Matches(find) {
@@ -170,7 +169,7 @@ func (h *HSController) GetDevices(find HSLookup) (*HSResult, bool) {
 	}
 	return result, true
 }
-func (h *HSController) GetDevice(find HSLookup) (*HSDevice, bool) {
+func (h *HSController) GetDevice(find apimodels.Match) (*HSDevice, bool) {
 	for _, device := range h.Devices {
 		if device.Matches(find) {
 			return device, true
@@ -179,10 +178,10 @@ func (h *HSController) GetDevice(find HSLookup) (*HSDevice, bool) {
 	return &HSDevice{}, false
 }
 
-func (h *HSController) GetChildDevice(find HSLookup) (*HSDevice, bool) {
-	cLookup, ok := find["Child"].(HSLookup)
+func (h *HSController) GetChildDevice(find apimodels.Match) (*HSDevice, bool) {
+	cLookup, ok := find["Child"].(apimodels.Match)
 	if !ok {
-		log.Error("GetChildDevice HSLookup requires a Child HSLookup element")
+		log.Error("GetChildDevice apimodels.Match requires a Child apimodels.Match element")
 		return &HSDevice{}, false
 	}
 	for _, device := range h.Devices {
@@ -196,11 +195,11 @@ func (h *HSController) GetChildDevice(find HSLookup) (*HSDevice, bool) {
 	}
 	return &HSDevice{}, false
 }
-func (h *HSController) GetChildDevices(find HSLookup) (*HSResult, bool) {
+func (h *HSController) GetChildDevices(find apimodels.Match) (*HSResult, bool) {
 	result := &HSResult{}
-	cLookup, ok := find["Child"].(HSLookup)
+	cLookup, ok := find["Child"].(apimodels.Match)
 	if !ok {
-		log.Error("GetChildDevice HSLookup requires a Child HSLookup element")
+		log.Error("GetChildDevice apimodels.Match requires a Child apimodels.Match element")
 		return result, false
 	}
 	for _, device := range h.Devices {
