@@ -37,7 +37,7 @@ func (c *API) GetAndUnmarshal(path string, object interface{}) error {
 	return nil
 }
 
-type HSControl struct {
+type HSAction struct {
 	API      *API
 	DeviceID int
 	Label    string
@@ -55,13 +55,35 @@ type HSDevice struct {
 	LastChange  *time.Time
 	Children    []*HSDevice
 	Parent      *HSDevice
-	Controls    []*HSControl
+	Actions     []*HSAction
 }
 
 type HSController struct {
 	API            *API
 	UpdateInterval time.Duration
 	Devices        []*HSDevice
+}
+
+func (c *HSController) IDString() string {
+	return c.API.Base
+}
+
+func (h *HSDevice) InvokeAction(label string) bool {
+	url := fmt.Sprintf("JSON?request=controldevicebylabel&ref=%d&label=%s", h.ID, label)
+	json_devices := &JD_HSDevices{}
+	err := h.API.GetAndUnmarshal(url, json_devices)
+	if err != nil {
+		log.WithFields(log.Fields{"id": h.ID, "error": err}).Error("unable to controldevicebyvalue")
+		return false
+	}
+	if len(json_devices.Devices) == 1 {
+		// lol?
+		h = json_devices.Devices[0].asHS()
+		return true
+	} else {
+		log.WithFields(log.Fields{"id": h.ID, "reply": json_devices}).Error("unable to controldevicebyvalue")
+		return false
+	}
 }
 
 func (h *HSDevice) SetValue(value float64) bool {
@@ -80,6 +102,9 @@ func (h *HSDevice) SetValue(value float64) bool {
 		log.WithFields(log.Fields{"id": h.ID, "reply": json_devices}).Error("unable to controldevicebyvalue")
 		return false
 	}
+}
+func (h *HSDevice) IDString() string {
+	return fmt.Sprintf("%d", h.ID)
 }
 func (h *HSDevice) Matches(find apimodels.Match) bool {
 	var sVal string
@@ -134,10 +159,17 @@ func (h *HSResult) Print() {
 		device.Print()
 	}
 }
-func (h *HSResult) SetValue(value float64) {
+func (h *HSResult) InvokeAction(action string) bool {
+	for _, device := range h.Devices {
+		device.InvokeAction(action)
+	}
+	return true
+}
+func (h *HSResult) SetValue(value float64) bool {
 	for _, device := range h.Devices {
 		device.SetValue(value)
 	}
+	return true
 }
 
 func (h *HSResult) Add(device *HSDevice) {
@@ -152,6 +184,22 @@ func (h *HSController) SetChildDevicesValue(find apimodels.Match, value float64)
 	}
 	return false
 }
+func (h *HSController) InvokeChildDevicesAction(find apimodels.Match, action string) bool {
+	devices, ok := h.GetChildDevices(find)
+	if ok {
+		devices.InvokeAction(action)
+		return true
+	}
+	return false
+}
+func (h *HSController) InvokeDevicesAction(find apimodels.Match, action string) bool {
+	devices, ok := h.GetDevices(find)
+	if ok {
+		devices.InvokeAction(action)
+		return true
+	}
+	return false
+}
 func (h *HSController) SetDevicesValue(find apimodels.Match, value float64) bool {
 	devices, ok := h.GetDevices(find)
 	if ok {
@@ -160,7 +208,7 @@ func (h *HSController) SetDevicesValue(find apimodels.Match, value float64) bool
 	}
 	return false
 }
-func (h *HSController) GetDevices(find apimodels.Match) (*HSResult, bool) {
+func (h *HSController) GetDevices(find apimodels.Match) (apimodels.Devices, bool) {
 	result := &HSResult{}
 	for _, device := range h.Devices {
 		if device.Matches(find) {
@@ -169,7 +217,7 @@ func (h *HSController) GetDevices(find apimodels.Match) (*HSResult, bool) {
 	}
 	return result, true
 }
-func (h *HSController) GetDevice(find apimodels.Match) (*HSDevice, bool) {
+func (h *HSController) GetDevice(find apimodels.Match) (apimodels.Device, bool) {
 	for _, device := range h.Devices {
 		if device.Matches(find) {
 			return device, true
@@ -178,7 +226,7 @@ func (h *HSController) GetDevice(find apimodels.Match) (*HSDevice, bool) {
 	return &HSDevice{}, false
 }
 
-func (h *HSController) GetChildDevice(find apimodels.Match) (*HSDevice, bool) {
+func (h *HSController) GetChildDevice(find apimodels.Match) (apimodels.Device, bool) {
 	cLookup, ok := find["Child"].(apimodels.Match)
 	if !ok {
 		log.Error("GetChildDevice apimodels.Match requires a Child apimodels.Match element")
@@ -195,7 +243,7 @@ func (h *HSController) GetChildDevice(find apimodels.Match) (*HSDevice, bool) {
 	}
 	return &HSDevice{}, false
 }
-func (h *HSController) GetChildDevices(find apimodels.Match) (*HSResult, bool) {
+func (h *HSController) GetChildDevices(find apimodels.Match) (apimodels.Devices, bool) {
 	result := &HSResult{}
 	cLookup, ok := find["Child"].(apimodels.Match)
 	if !ok {
@@ -222,18 +270,18 @@ func (h *HSController) Print() {
 
 func (h *HSDevice) Print() {
 	fmt.Printf("%s [Value = %f]\n", h.Name, h.Value)
-	for _, control := range h.Controls {
-		fmt.Printf(" - %s [Value = %f]\n", control.Label, control.Value)
+	for _, action := range h.Actions {
+		fmt.Printf(" - %s [Value = %f]\n", action.Label, action.Value)
 	}
 	for _, child := range h.Children {
 		fmt.Printf("    %s [Value = %f]\n", child.Name, child.Value)
-		for _, control := range child.Controls {
-			fmt.Printf("     - %s [Value = %f]\n", control.Label, control.Value)
+		for _, action := range child.Actions {
+			fmt.Printf("     - %s [Value = %f]\n", action.Label, action.Value)
 		}
 	}
 }
-func (h *HSDevice) SetControls(controls []*HSControl) {
-	h.Controls = controls
+func (h *HSDevice) SetControls(actions []*HSAction) {
+	h.Actions = actions
 }
 func (h *HSDevice) AddChild(device *HSDevice) {
 	device.Parent = h
@@ -248,7 +296,7 @@ func (h *HSController) Load() {
 	h.API.GetAndUnmarshal("JSON?request=getcontrol&ref=all", json_control_devices)
 	hold_devices := make(map[int][]*HSDevice)
 	devices := make(map[int]*HSDevice)
-	all_controls := make(map[int][]*HSControl)
+	all_controls := make(map[int][]*HSAction)
 
 	for _, json_control_device := range json_control_devices.Devices {
 		for _, pair := range json_control_device.ControlPairs {
