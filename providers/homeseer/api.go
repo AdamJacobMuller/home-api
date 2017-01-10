@@ -7,6 +7,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 	"time"
 )
 
@@ -107,9 +108,23 @@ func (h *HSDevice) IDString() string {
 	return fmt.Sprintf("%d", h.ID)
 }
 func (h *HSDevice) Matches(find apimodels.Match) bool {
+	var rVal *regexp.Regexp
 	var sVal string
 	var lVal apimodels.Match
 	var ok bool
+	var err error
+	sVal, ok = find["RegexpName"].(string)
+	if ok {
+		rVal, err = regexp.Compile(sVal)
+		if err != nil {
+			log.WithFields(log.Fields{"regexp": sVal, "error": err}).Error("unable to compile regexp")
+			return false
+		}
+		ok = rVal.MatchString(h.Name)
+		if !ok {
+			return false
+		}
+	}
 	sVal, ok = find["LocationOne"].(string)
 	if ok {
 		if sVal != h.LocationOne {
