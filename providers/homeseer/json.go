@@ -23,8 +23,8 @@ type JD_HSControlPair struct {
 	Range    *JD_HSControlRange `json:"Range"`
 }
 
-func (h *JD_HSControlPair) asHS() *HSControl {
-	return &HSControl{
+func (h *JD_HSControlPair) asHS() *HSAction {
+	return &HSAction{
 		Label:    h.Label,
 		DeviceID: h.DeviceID,
 		Value:    h.Value,
