@@ -53,6 +53,16 @@ func (a *APIServer) SetDevicesValue(w http.ResponseWriter, r *http.Request) {
 	a.readAndUnmarshalJson(r, cr)
 	a.Controller.SetDevicesValue(cr.Match, cr.Value)
 }
+func (a *APIServer) InvokeChildDevicesAction(w http.ResponseWriter, r *http.Request) {
+	cr := &apimodels.ControlRequest{}
+	a.readAndUnmarshalJson(r, cr)
+	a.Controller.InvokeChildDevicesAction(cr.Match, cr.Action)
+}
+func (a *APIServer) InvokeDevicesAction(w http.ResponseWriter, r *http.Request) {
+	cr := &apimodels.ControlRequest{}
+	a.readAndUnmarshalJson(r, cr)
+	a.Controller.InvokeDevicesAction(cr.Match, cr.Action)
+}
 func (a *APIServer) Serve() {
 	err := a.Server.ListenAndServe()
 	if err != nil {
@@ -71,6 +81,8 @@ func NewAPIServer() *APIServer {
 
 	handler.HandleFunc("/SetDevicesValue", apiserver.SetDevicesValue)
 	handler.HandleFunc("/SetChildDevicesValue", apiserver.SetChildDevicesValue)
+	handler.HandleFunc("/InvokeDevicesAction", apiserver.InvokeDevicesAction)
+	handler.HandleFunc("/InvokeChildDevicesAction", apiserver.InvokeChildDevicesAction)
 
 	apiserver.Server = &http.Server{Handler: n, Addr: "0.0.0.0:8145"}
 	return apiserver
