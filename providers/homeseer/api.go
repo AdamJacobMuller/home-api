@@ -227,7 +227,9 @@ func (h *HSController) GetDevice(find apimodels.Match) (apimodels.Device, bool) 
 }
 
 func (h *HSController) GetChildDevice(find apimodels.Match) (apimodels.Device, bool) {
-	cLookup, ok := find["Child"].(apimodels.Match)
+	var cLookup apimodels.Match
+	var ok bool
+	cLookup, ok = find["Child"].(map[string]interface{})
 	if !ok {
 		log.Error("GetChildDevice apimodels.Match requires a Child apimodels.Match element")
 		return &HSDevice{}, false
@@ -245,7 +247,9 @@ func (h *HSController) GetChildDevice(find apimodels.Match) (apimodels.Device, b
 }
 func (h *HSController) GetChildDevices(find apimodels.Match) (apimodels.Devices, bool) {
 	result := &HSResult{}
-	cLookup, ok := find["Child"].(apimodels.Match)
+	var cLookup apimodels.Match
+	var ok bool
+	cLookup, ok = find["Child"].(map[string]interface{})
 	if !ok {
 		log.Error("GetChildDevice apimodels.Match requires a Child apimodels.Match element")
 		return result, false
