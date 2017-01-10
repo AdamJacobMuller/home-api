@@ -18,27 +18,66 @@ type APIController struct {
 }
 
 func (c *APIController) SetDevicesValue(match apimodels.Match, value float64) bool {
+	var sVal string
+	var ok bool
+	sVal, ok = match["Provider"].(string)
+
 	for _, provider := range c.providers {
+		if ok {
+			if sVal != provider.IDString() {
+				continue
+			}
+		}
+
 		provider.SetDevicesValue(match, value)
 	}
 	return true
 }
 
 func (c *APIController) SetChildDevicesValue(match apimodels.Match, value float64) bool {
+	var sVal string
+	var ok bool
+	sVal, ok = match["Provider"].(string)
+
 	for _, provider := range c.providers {
+		if ok {
+			if sVal != provider.IDString() {
+				continue
+			}
+		}
 		provider.SetChildDevicesValue(match, value)
 	}
 	return true
 }
 
 func (c *APIController) InvokeChildDevicesAction(match apimodels.Match, action string) bool {
+	var sVal string
+	var ok bool
+	sVal, ok = match["Provider"].(string)
+
 	for _, provider := range c.providers {
+		if ok {
+			if sVal != provider.IDString() {
+				continue
+			}
+		}
+
 		provider.InvokeChildDevicesAction(match, action)
 	}
 	return true
 }
 func (c *APIController) InvokeDevicesAction(match apimodels.Match, action string) bool {
+	var sVal string
+	var ok bool
+	sVal, ok = match["Provider"].(string)
+
 	for _, provider := range c.providers {
+		if ok {
+			if sVal != provider.IDString() {
+				continue
+			}
+		}
+
 		provider.InvokeDevicesAction(match, action)
 	}
 	return true
