@@ -63,6 +63,9 @@ func (a *APIServer) InvokeDevicesAction(w http.ResponseWriter, r *http.Request) 
 	a.readAndUnmarshalJson(r, cr)
 	a.Controller.InvokeDevicesAction(cr.Match, cr.Action)
 }
+func (a *APIServer) LoadAndCreateProviders(filename string) bool {
+	return a.Controller.LoadAndCreateProviders(filename)
+}
 func (a *APIServer) Serve() {
 	err := a.Server.ListenAndServe()
 	if err != nil {
@@ -72,6 +75,8 @@ func (a *APIServer) Serve() {
 
 func NewAPIServer() *APIServer {
 	apiserver := &APIServer{}
+	apiserver.Controller = apicontroller.NewAPIController()
+
 	n := negroni.New()
 	recovery := negroni.NewRecovery()
 	n.Use(recovery)
