@@ -84,12 +84,34 @@ type Outlet struct {
 func (o *Outlet) Print() {
 	fmt.Printf("%s [#%d, Phase = %d, State = %t ]\n", o.Name, o.Index, o.Phase, o.State)
 }
+
+/*
+rPDUOutletControlOutletCommand OBJECT-TYPE
+   SYNTAX INTEGER {
+      immediateOn             (1),
+      immediateOff            (2),
+      immediateReboot         (3),
+      delayedOn               (4),
+      delayedOff              (5),
+      delayedReboot           (6),
+      cancelPendingCommand    (7)
+   }
+*/
+
 func (o *Outlet) InvokeAction(action string) bool {
 	switch action {
+	case "immediateOn":
+		return o.SetValue(1)
 	case "on":
 		return o.SetValue(1)
+	case "immediateOff":
+		return o.SetValue(2)
 	case "off":
 		return o.SetValue(2)
+	case "immediateReboot":
+		return o.SetValue(3)
+	case "reboot":
+		return o.SetValue(3)
 	default:
 		log.WithFields(log.Fields{"action": action}).Error("invalid action")
 		return false
