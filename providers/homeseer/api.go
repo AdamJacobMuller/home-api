@@ -68,6 +68,9 @@ type HSController struct {
 func (c *HSController) IDString() string {
 	return c.API.Base
 }
+func (c *HSController) TypeString() string {
+	return "HomeSeer"
+}
 
 func (h *HSDevice) InvokeAction(label string) bool {
 	url := fmt.Sprintf("JSON?request=controldevicebylabel&ref=%d&label=%s", h.ID, label)
@@ -373,6 +376,36 @@ func (h *HSController) BGUpdate() {
 		h.Load()
 		time.Sleep(h.UpdateInterval)
 	}
+}
+
+type HSConfiguration struct {
+	API            string `json:"API"`
+	UpdateInterval int    `json:"UpdateInterval"`
+}
+
+func (h *HSController) Create(configurationRaw json.RawMessage) bool {
+	var configuration *HSConfiguration
+
+	configuration = &HSConfiguration{}
+
+	json.Unmarshal(configurationRaw, configuration)
+
+	if configuration.API == "" {
+		log.WithFields(log.Fields{}).Error("API is a required configuration option")
+		return false
+	} else {
+		h.API = &API{
+			Base: configuration.API,
+		}
+	}
+	if configuration.UpdateInterval == 0 {
+		h.UpdateInterval = time.Duration(30 * time.Second)
+	} else {
+		h.UpdateInterval = time.Duration(time.Duration(configuration.UpdateInterval) * time.Second)
+	}
+	h.Load()
+	go h.BGUpdate()
+	return true
 }
 
 func NewHomeseerController(api string) *HSController {
