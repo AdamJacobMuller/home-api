@@ -3,6 +3,7 @@ package apicontroller
 import (
 	"github.com/AdamJacobMuller/home-api/api/models"
 	"github.com/AdamJacobMuller/home-api/providers/apc"
+	"github.com/AdamJacobMuller/home-api/providers/example"
 	"github.com/AdamJacobMuller/home-api/providers/homeseer"
 
 	log "github.com/Sirupsen/logrus"
@@ -18,6 +19,12 @@ type ControllerProvider interface {
 
 	InvokeDevicesAction(apimodels.Match, string) bool
 	InvokeChildDevicesAction(apimodels.Match, string) bool
+
+	GetDevices(apimodels.Match) (apimodels.Devices, bool)
+	GetDevice(apimodels.Match) (apimodels.Device, bool)
+	GetChildDevice(apimodels.Match) (apimodels.Device, bool)
+	GetChildDevices(apimodels.Match) (apimodels.Devices, bool)
+
 	TypeString() string
 	IDString() string
 	Create(json.RawMessage) bool
@@ -131,6 +138,8 @@ func (c *APIController) CreateProvider(providerRaw json.RawMessage) bool {
 		provider = &homeseer.HSController{}
 	case "APC PDU":
 		provider = &apc.PDU{}
+	case "Example Provider":
+		provider = &example.ExampleProvider{}
 	default:
 		return false
 	}
