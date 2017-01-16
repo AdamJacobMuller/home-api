@@ -1,6 +1,7 @@
 package example
 
 import (
+	"encoding/json"
 	"github.com/AdamJacobMuller/home-api/api/models"
 )
 
@@ -19,9 +20,50 @@ func (p *ExampleProvider) InvokeDevicesAction(apimodels.Match, string) bool {
 func (p *ExampleProvider) InvokeChildDevicesAction(apimodels.Match, string) bool {
 	return false
 }
+func (p *ExampleProvider) GetDevices(apimodels.Match) (apimodels.Devices, bool) {
+	return &ExampleList{}, false
+}
+func (p *ExampleProvider) GetDevice(apimodels.Match) (apimodels.Device, bool) {
+	return &ExampleDevice{}, false
+}
+func (p *ExampleProvider) GetChildDevice(apimodels.Match) (apimodels.Device, bool) {
+	return &ExampleDevice{}, false
+}
+func (p *ExampleProvider) GetChildDevices(apimodels.Match) (apimodels.Devices, bool) {
+	return &ExampleList{}, false
+}
+func (p *ExampleProvider) Create(json.RawMessage) bool {
+	return false
+}
 func (p *ExampleProvider) TypeString() string {
 	return "ExampleProviderType"
 }
 func (p *ExampleProvider) IDString() string {
 	return "ExampleProviderInstance"
+}
+
+type ExampleDevice struct {
+}
+
+func (d *ExampleDevice) SetValue(float64) bool {
+	return false
+}
+func (d *ExampleDevice) InvokeAction(string) bool {
+	return false
+}
+func (d *ExampleDevice) IDString() string {
+	return "ExampleDevice"
+}
+func (d *ExampleDevice) Matches(apimodels.Match) bool {
+	return false
+}
+
+type ExampleList struct {
+}
+
+func (l *ExampleList) SetValue(float64) bool {
+	return false
+}
+func (l *ExampleList) InvokeAction(string) bool {
+	return false
 }
