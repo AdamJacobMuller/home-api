@@ -188,13 +188,23 @@ func (o *Outlet) Matches(find apimodels.Match) bool {
 	return true
 }
 
-func (p *PDU) SetDevicesValue(apimodels.Match, float64) bool {
+func (p *PDU) SetDevicesValue(find apimodels.Match, value float64) bool {
+	devices, ok := p.GetDevices(find)
+	if ok {
+		devices.SetValue(value)
+		return true
+	}
+	return false
+}
+func (p *PDU) InvokeDevicesAction(find apimodels.Match, action string) bool {
+	devices, ok := p.GetDevices(find)
+	if ok {
+		devices.InvokeAction(action)
+		return true
+	}
 	return false
 }
 func (p *PDU) SetChildDevicesValue(apimodels.Match, float64) bool {
-	return false
-}
-func (p *PDU) InvokeDevicesAction(apimodels.Match, string) bool {
 	return false
 }
 func (p *PDU) InvokeChildDevicesAction(apimodels.Match, string) bool {
