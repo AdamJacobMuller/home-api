@@ -201,6 +201,53 @@ func (p *PDU) InvokeChildDevicesAction(apimodels.Match, string) bool {
 	return false
 }
 
+type OutletList struct {
+	Devices []*Outlet
+}
+
+func (l *OutletList) InvokeAction(action string) bool {
+	for _, device := range l.Devices {
+		device.InvokeAction(action)
+	}
+	return true
+}
+func (l *OutletList) Add(device *Outlet) {
+	l.Devices = append(l.Devices, device)
+}
+
+func (l *OutletList) SetValue(value float64) bool {
+	for _, device := range l.Devices {
+		device.SetValue(value)
+	}
+	return true
+}
+
+func (p *PDU) GetDevices(find apimodels.Match) (apimodels.Devices, bool) {
+	result := &OutletList{}
+	for _, device := range p.Outlets {
+		if device.Matches(find) {
+			result.Add(device)
+		}
+	}
+	return result, true
+}
+func (p *PDU) GetDevice(find apimodels.Match) (apimodels.Device, bool) {
+	for _, device := range p.Outlets {
+		if device.Matches(find) {
+			return device, true
+		}
+	}
+	return &Outlet{}, false
+}
+
+func (p *PDU) GetChildDevice(find apimodels.Match) (apimodels.Device, bool) {
+	return &Outlet{}, false
+}
+
+func (p *PDU) GetChildDevices(find apimodels.Match) (apimodels.Devices, bool) {
+	return &OutletList{}, false
+}
+
 type PDUConfiguration struct {
 	IP        string `json:"IP"`
 	Community string `json:"Community"`
