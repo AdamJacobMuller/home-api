@@ -59,6 +59,18 @@ type HSDevice struct {
 	Actions     []*HSAction
 }
 
+func (a *HSAction) GetName() string {
+	return a.Label
+}
+
+func (h *HSDevice) ListActions() []apimodels.Action {
+	l := make([]apimodels.Action, 0)
+	for _, a := range h.Actions {
+		l = append(l, a)
+	}
+	return l
+}
+
 type HSController struct {
 	API            *API
 	UpdateInterval time.Duration
