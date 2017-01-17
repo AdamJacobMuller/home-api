@@ -45,6 +45,9 @@ func (p *ExampleProvider) IDString() string {
 type ExampleDevice struct {
 }
 
+func (d *ExampleDevice) ListActions() []apimodels.Action {
+	return []apimodels.Action{}
+}
 func (d *ExampleDevice) SetValue(float64) bool {
 	return false
 }
