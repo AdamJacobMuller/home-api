@@ -118,6 +118,9 @@ func (o *Outlet) InvokeAction(action string) bool {
 	}
 	return false
 }
+func (o *Outlet) GetName() string {
+	return o.Name
+}
 func (o *Outlet) SetValue(value float64) bool {
 	oid := fmt.Sprintf(".1.3.6.1.4.1.318.1.1.12.3.3.1.1.4.16.%d", o.Index)
 	pdu := gosnmp.SnmpPDU{Name: oid, Value: int(value), Type: gosnmp.Integer}
@@ -196,6 +199,32 @@ func (p *PDU) SetDevicesValue(find apimodels.Match, value float64) bool {
 	}
 	return false
 }
+
+/*
+	case "immediateOn":
+	case "on":
+	case "immediateOff":
+	case "off":
+	case "immediateReboot":
+	case "reboot":
+*/
+
+type OutletAction struct {
+	Name string
+}
+
+func (a *OutletAction) GetName() string {
+	return a.Name
+}
+
+func (o *Outlet) ListActions() []apimodels.Action {
+	return []apimodels.Action{
+		&OutletAction{Name: "on"},
+		&OutletAction{Name: "off"},
+		&OutletAction{Name: "reboot"},
+	}
+}
+
 func (p *PDU) InvokeDevicesAction(find apimodels.Match, action string) bool {
 	devices, ok := p.GetDevices(find)
 	if ok {
