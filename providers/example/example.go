@@ -45,6 +45,9 @@ func (p *ExampleProvider) IDString() string {
 type ExampleDevice struct {
 }
 
+func (d *ExampleDevice) ListChildren() []apimodels.Device {
+	return []apimodels.Device{}
+}
 func (d *ExampleDevice) ListActions() []apimodels.Action {
 	return []apimodels.Action{}
 }
