@@ -13,6 +13,7 @@ type Device interface {
 	InvokeAction(string) bool
 	IDString() string
 	Matches(Match) bool
+	ListChildren() []Device
 	ListActions() []Action
 }
 
