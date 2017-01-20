@@ -84,6 +84,14 @@ func (c *HSController) TypeString() string {
 	return "HomeSeer"
 }
 
+func (h *HSDevice) ListChildren() []apimodels.Device {
+	r := make([]apimodels.Device, 0)
+	for _, c := range h.Children {
+		r = append(r, c)
+	}
+	return r
+}
+
 func (h *HSDevice) InvokeAction(label string) bool {
 	url := fmt.Sprintf("JSON?request=controldevicebylabel&ref=%d&label=%s", h.ID, label)
 	json_devices := &JD_HSDevices{}
