@@ -43,6 +43,10 @@ func (a *APIServer) marshalAndWriteJson(w http.ResponseWriter, object interface{
 	w.Write(jsonDocument)
 	return true
 }
+func (a *APIServer) ListDevices(w http.ResponseWriter, r *http.Request) {
+	cr := a.Controller.ListDevices()
+	a.marshalAndWriteJson(w, cr)
+}
 func (a *APIServer) SetChildDevicesValue(w http.ResponseWriter, r *http.Request) {
 	cr := &apimodels.ControlRequest{}
 	a.readAndUnmarshalJson(r, cr)
@@ -84,6 +88,7 @@ func NewAPIServer() *APIServer {
 	handler := mux.NewRouter()
 	n.UseHandler(handler)
 
+	handler.HandleFunc("/ListDevices", apiserver.ListDevices)
 	handler.HandleFunc("/SetDevicesValue", apiserver.SetDevicesValue)
 	handler.HandleFunc("/SetChildDevicesValue", apiserver.SetChildDevicesValue)
 	handler.HandleFunc("/InvokeDevicesAction", apiserver.InvokeDevicesAction)

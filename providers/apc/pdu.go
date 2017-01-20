@@ -265,6 +265,13 @@ func (l *OutletList) SetValue(value float64) bool {
 	}
 	return true
 }
+func (l *OutletList) List() []apimodels.Device {
+	r := make([]apimodels.Device, 0)
+	for _, c := range l.Devices {
+		r = append(r, c)
+	}
+	return r
+}
 
 func (p *PDU) GetDevices(find apimodels.Match) (apimodels.Devices, bool) {
 	result := &OutletList{}

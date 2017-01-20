@@ -127,6 +127,9 @@ func (h *HSDevice) SetValue(value float64) bool {
 		return false
 	}
 }
+func (h *HSDevice) GetName() string {
+	return h.Name
+}
 func (h *HSDevice) IDString() string {
 	return fmt.Sprintf("%d", h.ID)
 }
@@ -208,6 +211,14 @@ func (h *HSResult) SetValue(value float64) bool {
 		device.SetValue(value)
 	}
 	return true
+}
+
+func (h *HSResult) List() []apimodels.Device {
+	r := make([]apimodels.Device, 0)
+	for _, c := range h.Devices {
+		r = append(r, c)
+	}
+	return r
 }
 
 func (h *HSResult) Add(device *HSDevice) {

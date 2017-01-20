@@ -12,6 +12,7 @@ type Device interface {
 	SetValue(float64) bool
 	InvokeAction(string) bool
 	IDString() string
+	GetName() string
 	Matches(Match) bool
 	ListChildren() []Device
 	ListActions() []Action
@@ -24,4 +25,5 @@ type Action interface {
 type Devices interface {
 	SetValue(float64) bool
 	InvokeAction(string) bool
+	List() []Device
 }

@@ -57,8 +57,11 @@ func (d *ExampleDevice) SetValue(float64) bool {
 func (d *ExampleDevice) InvokeAction(string) bool {
 	return false
 }
+func (d *ExampleDevice) GetName() string {
+	return "ExampleDeviceName"
+}
 func (d *ExampleDevice) IDString() string {
-	return "ExampleDevice"
+	return "ExampleDeviceID"
 }
 func (d *ExampleDevice) Matches(apimodels.Match) bool {
 	return false
@@ -69,6 +72,9 @@ type ExampleList struct {
 
 func (l *ExampleList) SetValue(float64) bool {
 	return false
+}
+func (l *ExampleList) List() []apimodels.Device {
+	return []apimodels.Device{}
 }
 func (l *ExampleList) InvokeAction(string) bool {
 	return false
