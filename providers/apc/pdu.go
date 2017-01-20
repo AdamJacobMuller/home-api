@@ -85,6 +85,11 @@ func (o *Outlet) Print() {
 	fmt.Printf("%s [#%d, Phase = %d, State = %t ]\n", o.Name, o.Index, o.Phase, o.State)
 }
 
+func (o *Outlet) ListChildren() []apimodels.Device {
+	r := make([]apimodels.Device, 0)
+	return r
+}
+
 /*
 rPDUOutletControlOutletCommand OBJECT-TYPE
    SYNTAX INTEGER {
