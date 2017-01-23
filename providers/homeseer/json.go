@@ -37,17 +37,27 @@ type JD_HSDevices struct {
 	Devices []*JD_HSDevice `json:"Devices"`
 }
 type JD_HSDevice struct {
-	ID          int     `json:"ref"`
-	Name        string  `json:"name"`
-	LocationOne string  `json:"location"`
-	LocationTwo string  `json:"location2"`
-	Value       float64 `json:"value"`
-	Status      string  `json:"status"`
-	LastChange  string  `json:"last_change"`
-	TypeString  string  `json:"device_type_string"`
+	ID          int              `json:"ref"`
+	Name        string           `json:"name"`
+	LocationOne string           `json:"location"`
+	LocationTwo string           `json:"location2"`
+	Value       float64          `json:"value"`
+	Status      string           `json:"status"`
+	LastChange  string           `json:"last_change"`
+	TypeString  string           `json:"device_type_string"`
+	DeviceType  *JD_HSDeviceType `json:"device_type"`
 
 	Relationship       int   `json:"relationship"`
 	Associated_devices []int `json:"associated_devices"`
+}
+
+type JD_HSDeviceType struct {
+	Device_API                 int
+	Device_API_Description     string
+	Device_Type                int
+	Device_Type_Description    string
+	Device_SubType             int
+	Device_SubType_Description string
 }
 
 func (h *JD_HSDevice) asHS() *HSDevice {
@@ -59,5 +69,6 @@ func (h *JD_HSDevice) asHS() *HSDevice {
 		Value:       h.Value,
 		Status:      h.Status,
 		TypeString:  h.TypeString,
+		DeviceType:  h.DeviceType,
 	}
 }

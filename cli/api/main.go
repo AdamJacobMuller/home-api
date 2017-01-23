@@ -3,8 +3,14 @@ package main
 import (
 	"fmt"
 	"github.com/AdamJacobMuller/home-api/api/server"
+	log "github.com/Sirupsen/logrus"
 	"github.com/namsral/flag"
 	"os"
+)
+
+var (
+	Version   string
+	BuildTime string
 )
 
 func main() {
@@ -19,6 +25,7 @@ func main() {
 		fmt.Printf("-configuration is required\n")
 		os.Exit(1)
 	}
+	log.WithFields(log.Fields{"version": Version, "build-time": BuildTime}).Info("starting up API Server")
 
 	api := apiserver.NewAPIServer()
 	api.LoadAndCreateProviders(configuration)

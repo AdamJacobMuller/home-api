@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"github.com/AdamJacobMuller/home-api/api/controller"
 	"github.com/AdamJacobMuller/home-api/api/models"
+	"github.com/GeertJohan/go.rice"
 	log "github.com/Sirupsen/logrus"
-	"github.com/gorilla/mux"
-	"github.com/meatballhat/negroni-logrus"
-	"github.com/urfave/negroni"
+	"github.com/gocraft/web"
+	//"github.com/meatballhat/negroni-logrus"
 	"io/ioutil"
 	"net/http"
 )
@@ -17,7 +17,7 @@ type APIServer struct {
 	Controller *apicontroller.APIController
 }
 
-func (a *APIServer) readAndUnmarshalJson(r *http.Request, object interface{}) bool {
+func (a *APIServer) readAndUnmarshalJson(r *web.Request, object interface{}) bool {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.WithFields(log.Fields{"error": err}).Error("unable to read body")
@@ -31,7 +31,7 @@ func (a *APIServer) readAndUnmarshalJson(r *http.Request, object interface{}) bo
 	}
 	return true
 }
-func (a *APIServer) marshalAndWriteJson(w http.ResponseWriter, object interface{}) bool {
+func (a *APIServer) marshalAndWriteJson(w web.ResponseWriter, object interface{}) bool {
 	jsonDocument, err := json.Marshal(object)
 	if err != nil {
 		w.WriteHeader(503)
@@ -43,28 +43,49 @@ func (a *APIServer) marshalAndWriteJson(w http.ResponseWriter, object interface{
 	w.Write(jsonDocument)
 	return true
 }
-func (a *APIServer) ListDevices(w http.ResponseWriter, r *http.Request) {
+func (a *APIServer) ListDevices(w web.ResponseWriter, r *web.Request) {
 	cr := a.Controller.ListDevices()
 	a.marshalAndWriteJson(w, cr)
 }
-func (a *APIServer) SetChildDevicesValue(w http.ResponseWriter, r *http.Request) {
+func (a *APIServer) SetChildDevicesValue(w web.ResponseWriter, r *web.Request) {
 	cr := &apimodels.ControlRequest{}
-	a.readAndUnmarshalJson(r, cr)
+	cr.Value = -1
+	ok := a.readAndUnmarshalJson(r, cr)
+	if !ok {
+		return
+	}
+	if cr.Value == -1 {
+		return
+	}
 	a.Controller.SetChildDevicesValue(cr.Match, cr.Value)
 }
-func (a *APIServer) SetDevicesValue(w http.ResponseWriter, r *http.Request) {
+func (a *APIServer) SetDevicesValue(w web.ResponseWriter, r *web.Request) {
 	cr := &apimodels.ControlRequest{}
-	a.readAndUnmarshalJson(r, cr)
+	cr.Value = -1
+	ok := a.readAndUnmarshalJson(r, cr)
+	if !ok {
+		return
+	}
+	if cr.Value == -1 {
+		return
+	}
+	log.WithFields(log.Fields{"ControlRequest": cr}).Info("SetDevicesValue")
 	a.Controller.SetDevicesValue(cr.Match, cr.Value)
 }
-func (a *APIServer) InvokeChildDevicesAction(w http.ResponseWriter, r *http.Request) {
+func (a *APIServer) InvokeChildDevicesAction(w web.ResponseWriter, r *web.Request) {
 	cr := &apimodels.ControlRequest{}
-	a.readAndUnmarshalJson(r, cr)
+	ok := a.readAndUnmarshalJson(r, cr)
+	if !ok {
+		return
+	}
 	a.Controller.InvokeChildDevicesAction(cr.Match, cr.Action)
 }
-func (a *APIServer) InvokeDevicesAction(w http.ResponseWriter, r *http.Request) {
+func (a *APIServer) InvokeDevicesAction(w web.ResponseWriter, r *web.Request) {
 	cr := &apimodels.ControlRequest{}
-	a.readAndUnmarshalJson(r, cr)
+	ok := a.readAndUnmarshalJson(r, cr)
+	if !ok {
+		return
+	}
 	a.Controller.InvokeDevicesAction(cr.Match, cr.Action)
 }
 func (a *APIServer) LoadAndCreateProviders(filename string) bool {
@@ -81,19 +102,42 @@ func NewAPIServer() *APIServer {
 	apiserver := &APIServer{}
 	apiserver.Controller = apicontroller.NewAPIController()
 
-	n := negroni.New()
-	recovery := negroni.NewRecovery()
-	n.Use(recovery)
-	n.Use(negronilogrus.NewMiddleware())
-	handler := mux.NewRouter()
-	n.UseHandler(handler)
+	router := web.New(Context{})
 
-	handler.HandleFunc("/ListDevices", apiserver.ListDevices)
-	handler.HandleFunc("/SetDevicesValue", apiserver.SetDevicesValue)
-	handler.HandleFunc("/SetChildDevicesValue", apiserver.SetChildDevicesValue)
-	handler.HandleFunc("/InvokeDevicesAction", apiserver.InvokeDevicesAction)
-	handler.HandleFunc("/InvokeChildDevicesAction", apiserver.InvokeChildDevicesAction)
+	router.NotFound((*Context).NotFound)
 
-	apiserver.Server = &http.Server{Handler: n, Addr: "0.0.0.0:8145"}
+	conf := rice.Config{
+		LocateOrder: []rice.LocateMethod{rice.LocateFS, rice.LocateEmbedded, rice.LocateAppended},
+	}
+
+	box, err := conf.FindBox("files/insp")
+	if err != nil {
+		log.WithFields(log.Fields{"error": err}).Errorf("unable to find rice box")
+	} else {
+		router.Middleware(web.StaticMiddlewareFromDir(box.HTTPBox(), web.StaticOption{Prefix: "/static", IndexFile: "index.html"}))
+	}
+
+	router.Middleware(func(ctx *Context, resp web.ResponseWriter,
+		req *web.Request, next web.NextMiddlewareFunc) {
+		ctx.apiserver = apiserver
+		next(resp, req)
+	})
+	router.Middleware(web.LoggerMiddleware)
+	router.Middleware(web.ShowErrorsMiddleware)
+
+	admin := router.Subrouter(Context{}, "/")
+	admin.Middleware((*Context).DrawLayout)
+	admin.Middleware((*Context).AddControllerNavigation)
+	admin.Get("/", (*Context).Index)
+	admin.Get("/room/:LocationTwo/:LocationOne", (*Context).Room)
+
+	api := router.Subrouter(Context{}, "/api")
+	api.Get("/ListDevices", apiserver.ListDevices)
+	api.Post("/SetDevicesValue", apiserver.SetDevicesValue)
+	api.Post("/SetChildDevicesValue", apiserver.SetChildDevicesValue)
+	api.Post("/InvokeDevicesAction", apiserver.InvokeDevicesAction)
+	api.Post("/InvokeChildDevicesAction", apiserver.InvokeChildDevicesAction)
+
+	apiserver.Server = &http.Server{Handler: router, Addr: "0.0.0.0:8145"}
 	return apiserver
 }

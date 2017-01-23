@@ -85,6 +85,9 @@ func (o *Outlet) Print() {
 	fmt.Printf("%s [#%d, Phase = %d, State = %t ]\n", o.Name, o.Index, o.Phase, o.State)
 }
 
+func (o *Outlet) GetTypes() []string {
+	return []string{"Binary Switch"}
+}
 func (o *Outlet) ListChildren() []apimodels.Device {
 	r := make([]apimodels.Device, 0)
 	return r
@@ -136,6 +139,15 @@ func (o *Outlet) SetValue(value float64) bool {
 	} else {
 		return true
 	}
+}
+func (o *Outlet) GetLocationOne() string {
+	return "Basement"
+}
+func (o *Outlet) GetLocationTwo() string {
+	return o.PDU.Location
+}
+func (o *Outlet) ProviderIDString() string {
+	return o.PDU.Name
 }
 func (o *Outlet) IDString() string {
 	return fmt.Sprintf("%d", o.Index)

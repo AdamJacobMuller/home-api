@@ -56,9 +56,27 @@ type HSDevice struct {
 	LastChange  *time.Time
 	Children    []*HSDevice
 	Parent      *HSDevice
+	DeviceType  *JD_HSDeviceType
 	Actions     []*HSAction
 }
 
+func (d *HSDevice) GetTypes() []string {
+	var r []string
+
+	if d.TypeString != "" {
+		r = append(r, d.TypeString)
+	}
+	if d.DeviceType.Device_SubType_Description != "" {
+		r = append(r, d.DeviceType.Device_SubType_Description)
+	}
+	if d.DeviceType.Device_Type_Description != "" {
+		r = append(r, d.DeviceType.Device_Type_Description)
+	}
+	if d.DeviceType.Device_API_Description != "" {
+		r = append(r, d.DeviceType.Device_API_Description)
+	}
+	return r
+}
 func (a *HSAction) GetName() string {
 	return a.Label
 }
@@ -84,6 +102,12 @@ func (c *HSController) TypeString() string {
 	return "HomeSeer"
 }
 
+func (h *HSDevice) GetLocationOne() string {
+	return h.LocationOne
+}
+func (h *HSDevice) GetLocationTwo() string {
+	return h.LocationTwo
+}
 func (h *HSDevice) ListChildren() []apimodels.Device {
 	r := make([]apimodels.Device, 0)
 	for _, c := range h.Children {
@@ -130,6 +154,9 @@ func (h *HSDevice) SetValue(value float64) bool {
 func (h *HSDevice) GetName() string {
 	return h.Name
 }
+func (h *HSDevice) ProviderIDString() string {
+	return h.API.Base
+}
 func (h *HSDevice) IDString() string {
 	return fmt.Sprintf("%d", h.ID)
 }
@@ -148,6 +175,12 @@ func (h *HSDevice) Matches(find apimodels.Match) bool {
 		}
 		ok = rVal.MatchString(h.Name)
 		if !ok {
+			return false
+		}
+	}
+	sVal, ok = find["DeviceID"].(string)
+	if ok {
+		if sVal != h.IDString() {
 			return false
 		}
 	}

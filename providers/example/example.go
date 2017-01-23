@@ -51,6 +51,9 @@ func (d *ExampleDevice) ListChildren() []apimodels.Device {
 func (d *ExampleDevice) ListActions() []apimodels.Action {
 	return []apimodels.Action{}
 }
+func (d *ExampleDevice) GetTypes() []string {
+	return []string{}
+}
 func (d *ExampleDevice) SetValue(float64) bool {
 	return false
 }
@@ -59,6 +62,15 @@ func (d *ExampleDevice) InvokeAction(string) bool {
 }
 func (d *ExampleDevice) GetName() string {
 	return "ExampleDeviceName"
+}
+func (d *ExampleDevice) GetLocationOne() string {
+	return "Floor"
+}
+func (d *ExampleDevice) ProviderIDString() string {
+	return "ExampleProviderID"
+}
+func (d *ExampleDevice) GetLocationTwo() string {
+	return "Room"
 }
 func (d *ExampleDevice) IDString() string {
 	return "ExampleDeviceID"

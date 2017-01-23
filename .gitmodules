@@ -1,0 +1,3 @@
+[submodule "api/server/files/sbadmin"]
+	path = api/server/files/sbadmin
+	url = https://github.com/BlackrockDigital/startbootstrap-sb-admin-2.git

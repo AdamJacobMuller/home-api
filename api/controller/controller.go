@@ -34,6 +34,54 @@ type APIController struct {
 	providers []ControllerProvider
 }
 
+func (c *APIController) GetDevices(match apimodels.Match) []apimodels.Device {
+	var devices []apimodels.Device
+	for _, provider := range c.providers {
+		provider_devices, ok := provider.GetDevices(match)
+		if !ok {
+			log.WithFields(log.Fields{"ProviderType": provider.TypeString(), "ProviderID": provider.IDString()}).Error("unable to list devices")
+			continue
+		}
+		for _, device := range provider_devices.List() {
+			devices = append(devices, device)
+		}
+	}
+	return devices
+}
+func (c *APIController) Locations() map[string][]string {
+	fs := make(map[string][]string)
+
+	var locationone string
+	var locationtwo string
+	var doappend bool
+
+	for _, provider := range c.providers {
+		devices, ok := provider.GetDevices(apimodels.Match{})
+		if !ok {
+			log.WithFields(log.Fields{"ProviderType": provider.TypeString(), "ProviderID": provider.IDString()}).Error("unable to list devices")
+			continue
+		}
+		for _, device := range devices.List() {
+			locationone = device.GetLocationOne()
+			locationtwo = device.GetLocationTwo()
+			_, ok := fs[locationtwo]
+			if !ok {
+				fs[locationtwo] = make([]string, 0)
+			}
+			doappend = true
+			for _, v := range fs[locationtwo] {
+				if v == locationone {
+					doappend = false
+					continue
+				}
+			}
+			if doappend {
+				fs[locationtwo] = append(fs[locationtwo], locationone)
+			}
+		}
+	}
+	return fs
+}
 func (c *APIController) MatchProvider(match apimodels.Match, provider ControllerProvider) bool {
 	var sVal string
 	var ok bool
@@ -120,7 +168,7 @@ func (c *APIController) LoadAndCreateProviders(filename string) bool {
 	}
 
 	for _, provider = range config.Providers {
-		c.CreateProvider(provider)
+		go c.CreateProvider(provider)
 	}
 
 	return true

@@ -11,11 +11,15 @@ type ControlRequest struct {
 type Device interface {
 	SetValue(float64) bool
 	InvokeAction(string) bool
+	ProviderIDString() string
 	IDString() string
 	GetName() string
 	Matches(Match) bool
 	ListChildren() []Device
 	ListActions() []Action
+	GetLocationOne() string
+	GetLocationTwo() string
+	GetTypes() []string
 }
 
 type Action interface {

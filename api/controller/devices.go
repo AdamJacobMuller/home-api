@@ -12,6 +12,7 @@ type JSON_Devices struct {
 
 type JSON_Device struct {
 	Name string `json:"name"`
+	ID   string `json:"string"`
 }
 
 func (c *APIController) ListDevices() JSON_Devices {
@@ -24,6 +25,7 @@ func (c *APIController) ListDevices() JSON_Devices {
 		for _, device := range devices.List() {
 			j_devices.Devices = append(j_devices.Devices, JSON_Device{
 				Name: device.GetName(),
+				ID:   device.IDString(),
 			})
 		}
 	}
