@@ -47,9 +47,11 @@ func (d *JSON_Device) AddAction(action apimodels.Action) {
 
 func DeviceTOJSON(device apimodels.Device) (json_device JSON_Device) {
 	json_device = JSON_Device{
-		Name:       device.GetName(),
-		DeviceID:   device.IDString(),
-		ProviderID: device.ProviderIDString(),
+		Name:        device.GetName(),
+		DeviceID:    device.IDString(),
+		ProviderID:  device.ProviderIDString(),
+		LocationOne: device.GetLocationOne(),
+		LocationTwo: device.GetLocationTwo(),
 	}
 
 	for _, typestring := range device.ListTypes() {
