@@ -161,8 +161,8 @@ interface Box {
                     </div>
                     <div class="ibox-content">
                     <p>
-                        <button class="btn btn-primary btn-large-dim" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 255)%}><i class="fa fa-power-off"></i></button>
-                        <button class="btn btn-danger btn-large-dim" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 0)%}><i class="fa fa-power-off"></i></button>
+                        <button class="btn btn-primary btn-large-dim" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 255)%}><i class="fa fa-power-off"></i></button>
+                        <button class="btn btn-danger btn-large-dim" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 0)%}><i class="fa fa-power-off"></i></button>
                     </p>
                     </div>
                 </div>
@@ -181,26 +181,32 @@ interface Box {
                     </div>
                     <div class="ibox-content">
                     <p>
-                        <button class="btn btn-primary btn-large-dim" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 255) %}><i class="fa fa-power-off"></i></button>
-                        <button class="btn btn-danger btn-large-dim" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 0) %}><i class="fa fa-power-off"></i></button>
+                        <button class="btn btn-primary btn-large-dim" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 255) %}><i class="fa fa-power-off"></i></button>
+                        <button class="btn btn-danger btn-large-dim" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 0) %}><i class="fa fa-power-off"></i></button>
                     </p>
                     <p>
-                        <button class="btn btn-default" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 1) %}>1%</button>
-                        <button class="btn btn-default" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 10) %}>10%</button>
-                        <button class="btn btn-default" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 25) %}>25%</button>
-                        <button class="btn btn-default" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 50) %}>50%</button>
-                        <button class="btn btn-default" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 75) %}>75%</button>
-                        <button class="btn btn-default" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 100) %}>100%</button>
+                        <button class="btn btn-default" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 1) %}>1%</button>
+                        <button class="btn btn-default" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 10) %}>10%</button>
+                        <button class="btn btn-default" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 25) %}>25%</button>
+                        <button class="btn btn-default" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 50) %}>50%</button>
+                        <button class="btn btn-default" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 75) %}>75%</button>
+                        <button class="btn btn-default" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 100) %}>100%</button>
                     </p>
                     </div>
                 </div>
             </div>
 {% endfunc %}
-{% func OnClickSetValue(ProviderID string, DeviceID string, value int) %}
-onclick="$.ajax({type: 'POST', url: '/api/SetDevicesValue', data: JSON.stringify({'match':{'ProviderID': '{%s ProviderID %}', 'DeviceID': '{%s DeviceID%}'}, 'value': {%d value%}}), success: function(data){console.log(data);}, dataType: 'json'});"
+{% func OnClickSetDeviceValue(ProviderID string, DeviceID string, value int) %}
+onclick="$.ajax({type: 'POST', url: '/api/SetDevicesValue', data: JSON.stringify({'match':{ProviderID: '{%s ProviderID %}', DeviceID: '{%s DeviceID%}'}, value: {%d value%}}), success: function(data){console.log(data);}, dataType: 'json'});"
+{% endfunc %}
+{% func OnClickInvokeDeviceAction(ProviderID string, DeviceID string, action string) %}
+onclick="$.ajax({type: 'POST', url: '/api/InvokeDevicesAction', data: JSON.stringify({'match':{ProviderID: '{%s ProviderID %}', DeviceID: '{%s DeviceID%}'}, action: '{%s action%}'}), success: function(data){console.log(data);}, dataType: 'json'});"
 {% endfunc %}
 {% func OnClickSetChildDeviceValue(ProviderID string, DeviceID string, ChildName string, value int) %}
-onclick="$.ajax({type: 'POST', url: '/api/SetChildDevicesValue', data: JSON.stringify({match:{ProviderID: '{%s ProviderID %}', DeviceID: '{%s DeviceID%}', Child: {Name: '{%s ChildName%}'}}, 'value': {%d value%}}), success: function(data){console.log(data);}, dataType: 'json'});"
+onclick="$.ajax({type: 'POST', url: '/api/SetChildDevicesValue', data: JSON.stringify({match:{ProviderID: '{%s ProviderID %}', DeviceID: '{%s DeviceID%}', Child: {Name: '{%s ChildName%}'}}, value: {%d value%}}), success: function(data){console.log(data);}, dataType: 'json'});"
+{% endfunc %}
+{% func OnClickInvokeChildDeviceAction(ProviderID string, DeviceID string, ChildName string, action string) %}
+onclick="$.ajax({type: 'POST', url: '/api/InvokeChildDevicesAction', data: JSON.stringify({match:{ProviderID: '{%s ProviderID %}', DeviceID: '{%s DeviceID%}', Child: {Name: '{%s ChildName%}'}}, action: {%s action %}}), success: function(data){console.log(data);}, dataType: 'json'});"
 {% endfunc %}
 {% func (b ColorChangeBulbBox) HTML() %}
 <div class="col-lg-4">
@@ -215,15 +221,15 @@ onclick="$.ajax({type: 'POST', url: '/api/SetChildDevicesValue', data: JSON.stri
                     </div>
                     <div class="ibox-content">
                     <p>
-                        <button class="btn btn-primary btn-large-dim" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 255) %}><i class="fa fa-power-off"></i></button>
-                        <button class="btn btn-danger btn-large-dim" type="button" {%= OnClickSetValue(b.ProviderID, b.DeviceID, 0) %}><i class="fa fa-power-off"></i></button>
+                        <button class="btn btn-primary btn-large-dim" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Switch Multilevel", 255) %}><i class="fa fa-power-off"></i></button>
+                        <button class="btn btn-danger btn-large-dim" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Switch Multilevel", 0) %}><i class="fa fa-power-off"></i></button>
                     </p>
                     <p>
-                        <button class="btn btn-danger" type="button">R</button>
-                        <button class="btn btn-primary" type="button">G</button>
-                        <button class="btn btn-success" type="button">B</button>
-                        <button class="btn btn-default" type="button">CW</button>
-                        <button class="btn btn-default" type="button">WW</button>
+                        <button class="btn btn-danger" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Color Control Red Channel", 255) %}>R</button>
+                        <button class="btn btn-primary" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Color Control Green Channel", 255) %}>G</button>
+                        <button class="btn btn-success" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Color Control Blue Channel", 255) %}>B</button>
+                        <button class="btn btn-default" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Color Control Cold_White Channel", 255) %}>CW</button>
+                        <button class="btn btn-default" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Color Control Warm_White Channel", 255) %}>WW</button>
                     </p>
                     </div>
                 </div>
@@ -241,9 +247,9 @@ onclick="$.ajax({type: 'POST', url: '/api/SetChildDevicesValue', data: JSON.stri
                         </div>
                     </div>
                     <div class="ibox-content">
-                    <button class="btn btn-default btn-large-dim" type="button"><i class="fa fa-play"></i></button>
-                    <button class="btn btn-default btn-large-dim" type="button"><i class="fa fa-pause"></i></button>
-                    <button class="btn btn-default btn-large-dim" type="button"><i class="fa fa-step-forward"></i></button>
+                    <button class="btn btn-default btn-large-dim" type="button" {%= OnClickInvokeDeviceAction(b.ProviderID, b.DeviceID, "Play") %}><i class="fa fa-play"></i></button>
+                    <button class="btn btn-default btn-large-dim" type="button" {%= OnClickInvokeDeviceAction(b.ProviderID, b.DeviceID, "Pause") %}><i class="fa fa-pause"></i></button>
+                    <button class="btn btn-default btn-large-dim" type="button" {%= OnClickInvokeDeviceAction(b.ProviderID, b.DeviceID, "Next") %}><i class="fa fa-step-forward"></i></button>
                     </div>
                 </div>
             </div>

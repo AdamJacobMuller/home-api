@@ -324,12 +324,12 @@ func (b BinarySwitchBox) StreamHTML(qw422016 *qt422016.Writer) {
                     <p>
                         <button class="btn btn-primary btn-large-dim" type="button" `)
 	//line api/server/templates/rows.qtpl:164
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 255)
+	StreamOnClickSetDeviceValue(qw422016, b.ProviderID, b.DeviceID, 255)
 	//line api/server/templates/rows.qtpl:164
 	qw422016.N().S(`><i class="fa fa-power-off"></i></button>
                         <button class="btn btn-danger btn-large-dim" type="button" `)
 	//line api/server/templates/rows.qtpl:165
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 0)
+	StreamOnClickSetDeviceValue(qw422016, b.ProviderID, b.DeviceID, 0)
 	//line api/server/templates/rows.qtpl:165
 	qw422016.N().S(`><i class="fa fa-power-off"></i></button>
                     </p>
@@ -388,44 +388,44 @@ func (b DimmableSwitchBox) StreamHTML(qw422016 *qt422016.Writer) {
                     <p>
                         <button class="btn btn-primary btn-large-dim" type="button" `)
 	//line api/server/templates/rows.qtpl:184
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 255)
+	StreamOnClickSetDeviceValue(qw422016, b.ProviderID, b.DeviceID, 255)
 	//line api/server/templates/rows.qtpl:184
 	qw422016.N().S(`><i class="fa fa-power-off"></i></button>
                         <button class="btn btn-danger btn-large-dim" type="button" `)
 	//line api/server/templates/rows.qtpl:185
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 0)
+	StreamOnClickSetDeviceValue(qw422016, b.ProviderID, b.DeviceID, 0)
 	//line api/server/templates/rows.qtpl:185
 	qw422016.N().S(`><i class="fa fa-power-off"></i></button>
                     </p>
                     <p>
                         <button class="btn btn-default" type="button" `)
 	//line api/server/templates/rows.qtpl:188
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 1)
+	StreamOnClickSetDeviceValue(qw422016, b.ProviderID, b.DeviceID, 1)
 	//line api/server/templates/rows.qtpl:188
 	qw422016.N().S(`>1%</button>
                         <button class="btn btn-default" type="button" `)
 	//line api/server/templates/rows.qtpl:189
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 10)
+	StreamOnClickSetDeviceValue(qw422016, b.ProviderID, b.DeviceID, 10)
 	//line api/server/templates/rows.qtpl:189
 	qw422016.N().S(`>10%</button>
                         <button class="btn btn-default" type="button" `)
 	//line api/server/templates/rows.qtpl:190
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 25)
+	StreamOnClickSetDeviceValue(qw422016, b.ProviderID, b.DeviceID, 25)
 	//line api/server/templates/rows.qtpl:190
 	qw422016.N().S(`>25%</button>
                         <button class="btn btn-default" type="button" `)
 	//line api/server/templates/rows.qtpl:191
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 50)
+	StreamOnClickSetDeviceValue(qw422016, b.ProviderID, b.DeviceID, 50)
 	//line api/server/templates/rows.qtpl:191
 	qw422016.N().S(`>50%</button>
                         <button class="btn btn-default" type="button" `)
 	//line api/server/templates/rows.qtpl:192
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 75)
+	StreamOnClickSetDeviceValue(qw422016, b.ProviderID, b.DeviceID, 75)
 	//line api/server/templates/rows.qtpl:192
 	qw422016.N().S(`>75%</button>
                         <button class="btn btn-default" type="button" `)
 	//line api/server/templates/rows.qtpl:193
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 100)
+	StreamOnClickSetDeviceValue(qw422016, b.ProviderID, b.DeviceID, 100)
 	//line api/server/templates/rows.qtpl:193
 	qw422016.N().S(`>100%</button>
                     </p>
@@ -463,18 +463,18 @@ func (b DimmableSwitchBox) HTML() string {
 }
 
 //line api/server/templates/rows.qtpl:199
-func StreamOnClickSetValue(qw422016 *qt422016.Writer, ProviderID string, DeviceID string, value int) {
+func StreamOnClickSetDeviceValue(qw422016 *qt422016.Writer, ProviderID string, DeviceID string, value int) {
 	//line api/server/templates/rows.qtpl:199
 	qw422016.N().S(`
-onclick="$.ajax({type: 'POST', url: '/api/SetDevicesValue', data: JSON.stringify({'match':{'ProviderID': '`)
+onclick="$.ajax({type: 'POST', url: '/api/SetDevicesValue', data: JSON.stringify({'match':{ProviderID: '`)
 	//line api/server/templates/rows.qtpl:200
 	qw422016.E().S(ProviderID)
 	//line api/server/templates/rows.qtpl:200
-	qw422016.N().S(`', 'DeviceID': '`)
+	qw422016.N().S(`', DeviceID: '`)
 	//line api/server/templates/rows.qtpl:200
 	qw422016.E().S(DeviceID)
 	//line api/server/templates/rows.qtpl:200
-	qw422016.N().S(`'}, 'value': `)
+	qw422016.N().S(`'}, value: `)
 	//line api/server/templates/rows.qtpl:200
 	qw422016.N().D(value)
 	//line api/server/templates/rows.qtpl:200
@@ -484,22 +484,22 @@ onclick="$.ajax({type: 'POST', url: '/api/SetDevicesValue', data: JSON.stringify
 }
 
 //line api/server/templates/rows.qtpl:201
-func WriteOnClickSetValue(qq422016 qtio422016.Writer, ProviderID string, DeviceID string, value int) {
+func WriteOnClickSetDeviceValue(qq422016 qtio422016.Writer, ProviderID string, DeviceID string, value int) {
 	//line api/server/templates/rows.qtpl:201
 	qw422016 := qt422016.AcquireWriter(qq422016)
 	//line api/server/templates/rows.qtpl:201
-	StreamOnClickSetValue(qw422016, ProviderID, DeviceID, value)
+	StreamOnClickSetDeviceValue(qw422016, ProviderID, DeviceID, value)
 	//line api/server/templates/rows.qtpl:201
 	qt422016.ReleaseWriter(qw422016)
 //line api/server/templates/rows.qtpl:201
 }
 
 //line api/server/templates/rows.qtpl:201
-func OnClickSetValue(ProviderID string, DeviceID string, value int) string {
+func OnClickSetDeviceValue(ProviderID string, DeviceID string, value int) string {
 	//line api/server/templates/rows.qtpl:201
 	qb422016 := qt422016.AcquireByteBuffer()
 	//line api/server/templates/rows.qtpl:201
-	WriteOnClickSetValue(qb422016, ProviderID, DeviceID, value)
+	WriteOnClickSetDeviceValue(qb422016, ProviderID, DeviceID, value)
 	//line api/server/templates/rows.qtpl:201
 	qs422016 := string(qb422016.B)
 	//line api/server/templates/rows.qtpl:201
@@ -510,10 +510,10 @@ func OnClickSetValue(ProviderID string, DeviceID string, value int) string {
 }
 
 //line api/server/templates/rows.qtpl:202
-func StreamOnClickSetChildDeviceValue(qw422016 *qt422016.Writer, ProviderID string, DeviceID string, ChildName string, value int) {
+func StreamOnClickInvokeDeviceAction(qw422016 *qt422016.Writer, ProviderID string, DeviceID string, action string) {
 	//line api/server/templates/rows.qtpl:202
 	qw422016.N().S(`
-onclick="$.ajax({type: 'POST', url: '/api/SetChildDevicesValue', data: JSON.stringify({match:{ProviderID: '`)
+onclick="$.ajax({type: 'POST', url: '/api/InvokeDevicesAction', data: JSON.stringify({'match':{ProviderID: '`)
 	//line api/server/templates/rows.qtpl:203
 	qw422016.E().S(ProviderID)
 	//line api/server/templates/rows.qtpl:203
@@ -521,36 +521,32 @@ onclick="$.ajax({type: 'POST', url: '/api/SetChildDevicesValue', data: JSON.stri
 	//line api/server/templates/rows.qtpl:203
 	qw422016.E().S(DeviceID)
 	//line api/server/templates/rows.qtpl:203
-	qw422016.N().S(`', Child: {Name: '`)
+	qw422016.N().S(`'}, action: '`)
 	//line api/server/templates/rows.qtpl:203
-	qw422016.E().S(ChildName)
+	qw422016.E().S(action)
 	//line api/server/templates/rows.qtpl:203
-	qw422016.N().S(`'}}, 'value': `)
-	//line api/server/templates/rows.qtpl:203
-	qw422016.N().D(value)
-	//line api/server/templates/rows.qtpl:203
-	qw422016.N().S(`}), success: function(data){console.log(data);}, dataType: 'json'});"
+	qw422016.N().S(`'}), success: function(data){console.log(data);}, dataType: 'json'});"
 `)
 //line api/server/templates/rows.qtpl:204
 }
 
 //line api/server/templates/rows.qtpl:204
-func WriteOnClickSetChildDeviceValue(qq422016 qtio422016.Writer, ProviderID string, DeviceID string, ChildName string, value int) {
+func WriteOnClickInvokeDeviceAction(qq422016 qtio422016.Writer, ProviderID string, DeviceID string, action string) {
 	//line api/server/templates/rows.qtpl:204
 	qw422016 := qt422016.AcquireWriter(qq422016)
 	//line api/server/templates/rows.qtpl:204
-	StreamOnClickSetChildDeviceValue(qw422016, ProviderID, DeviceID, ChildName, value)
+	StreamOnClickInvokeDeviceAction(qw422016, ProviderID, DeviceID, action)
 	//line api/server/templates/rows.qtpl:204
 	qt422016.ReleaseWriter(qw422016)
 //line api/server/templates/rows.qtpl:204
 }
 
 //line api/server/templates/rows.qtpl:204
-func OnClickSetChildDeviceValue(ProviderID string, DeviceID string, ChildName string, value int) string {
+func OnClickInvokeDeviceAction(ProviderID string, DeviceID string, action string) string {
 	//line api/server/templates/rows.qtpl:204
 	qb422016 := qt422016.AcquireByteBuffer()
 	//line api/server/templates/rows.qtpl:204
-	WriteOnClickSetChildDeviceValue(qb422016, ProviderID, DeviceID, ChildName, value)
+	WriteOnClickInvokeDeviceAction(qb422016, ProviderID, DeviceID, action)
 	//line api/server/templates/rows.qtpl:204
 	qs422016 := string(qb422016.B)
 	//line api/server/templates/rows.qtpl:204
@@ -561,16 +557,118 @@ func OnClickSetChildDeviceValue(ProviderID string, DeviceID string, ChildName st
 }
 
 //line api/server/templates/rows.qtpl:205
-func (b ColorChangeBulbBox) StreamHTML(qw422016 *qt422016.Writer) {
+func StreamOnClickSetChildDeviceValue(qw422016 *qt422016.Writer, ProviderID string, DeviceID string, ChildName string, value int) {
 	//line api/server/templates/rows.qtpl:205
+	qw422016.N().S(`
+onclick="$.ajax({type: 'POST', url: '/api/SetChildDevicesValue', data: JSON.stringify({match:{ProviderID: '`)
+	//line api/server/templates/rows.qtpl:206
+	qw422016.E().S(ProviderID)
+	//line api/server/templates/rows.qtpl:206
+	qw422016.N().S(`', DeviceID: '`)
+	//line api/server/templates/rows.qtpl:206
+	qw422016.E().S(DeviceID)
+	//line api/server/templates/rows.qtpl:206
+	qw422016.N().S(`', Child: {Name: '`)
+	//line api/server/templates/rows.qtpl:206
+	qw422016.E().S(ChildName)
+	//line api/server/templates/rows.qtpl:206
+	qw422016.N().S(`'}}, value: `)
+	//line api/server/templates/rows.qtpl:206
+	qw422016.N().D(value)
+	//line api/server/templates/rows.qtpl:206
+	qw422016.N().S(`}), success: function(data){console.log(data);}, dataType: 'json'});"
+`)
+//line api/server/templates/rows.qtpl:207
+}
+
+//line api/server/templates/rows.qtpl:207
+func WriteOnClickSetChildDeviceValue(qq422016 qtio422016.Writer, ProviderID string, DeviceID string, ChildName string, value int) {
+	//line api/server/templates/rows.qtpl:207
+	qw422016 := qt422016.AcquireWriter(qq422016)
+	//line api/server/templates/rows.qtpl:207
+	StreamOnClickSetChildDeviceValue(qw422016, ProviderID, DeviceID, ChildName, value)
+	//line api/server/templates/rows.qtpl:207
+	qt422016.ReleaseWriter(qw422016)
+//line api/server/templates/rows.qtpl:207
+}
+
+//line api/server/templates/rows.qtpl:207
+func OnClickSetChildDeviceValue(ProviderID string, DeviceID string, ChildName string, value int) string {
+	//line api/server/templates/rows.qtpl:207
+	qb422016 := qt422016.AcquireByteBuffer()
+	//line api/server/templates/rows.qtpl:207
+	WriteOnClickSetChildDeviceValue(qb422016, ProviderID, DeviceID, ChildName, value)
+	//line api/server/templates/rows.qtpl:207
+	qs422016 := string(qb422016.B)
+	//line api/server/templates/rows.qtpl:207
+	qt422016.ReleaseByteBuffer(qb422016)
+	//line api/server/templates/rows.qtpl:207
+	return qs422016
+//line api/server/templates/rows.qtpl:207
+}
+
+//line api/server/templates/rows.qtpl:208
+func StreamOnClickInvokeChildDeviceAction(qw422016 *qt422016.Writer, ProviderID string, DeviceID string, ChildName string, action string) {
+	//line api/server/templates/rows.qtpl:208
+	qw422016.N().S(`
+onclick="$.ajax({type: 'POST', url: '/api/InvokeChildDevicesAction', data: JSON.stringify({match:{ProviderID: '`)
+	//line api/server/templates/rows.qtpl:209
+	qw422016.E().S(ProviderID)
+	//line api/server/templates/rows.qtpl:209
+	qw422016.N().S(`', DeviceID: '`)
+	//line api/server/templates/rows.qtpl:209
+	qw422016.E().S(DeviceID)
+	//line api/server/templates/rows.qtpl:209
+	qw422016.N().S(`', Child: {Name: '`)
+	//line api/server/templates/rows.qtpl:209
+	qw422016.E().S(ChildName)
+	//line api/server/templates/rows.qtpl:209
+	qw422016.N().S(`'}}, action: `)
+	//line api/server/templates/rows.qtpl:209
+	qw422016.E().S(action)
+	//line api/server/templates/rows.qtpl:209
+	qw422016.N().S(`}), success: function(data){console.log(data);}, dataType: 'json'});"
+`)
+//line api/server/templates/rows.qtpl:210
+}
+
+//line api/server/templates/rows.qtpl:210
+func WriteOnClickInvokeChildDeviceAction(qq422016 qtio422016.Writer, ProviderID string, DeviceID string, ChildName string, action string) {
+	//line api/server/templates/rows.qtpl:210
+	qw422016 := qt422016.AcquireWriter(qq422016)
+	//line api/server/templates/rows.qtpl:210
+	StreamOnClickInvokeChildDeviceAction(qw422016, ProviderID, DeviceID, ChildName, action)
+	//line api/server/templates/rows.qtpl:210
+	qt422016.ReleaseWriter(qw422016)
+//line api/server/templates/rows.qtpl:210
+}
+
+//line api/server/templates/rows.qtpl:210
+func OnClickInvokeChildDeviceAction(ProviderID string, DeviceID string, ChildName string, action string) string {
+	//line api/server/templates/rows.qtpl:210
+	qb422016 := qt422016.AcquireByteBuffer()
+	//line api/server/templates/rows.qtpl:210
+	WriteOnClickInvokeChildDeviceAction(qb422016, ProviderID, DeviceID, ChildName, action)
+	//line api/server/templates/rows.qtpl:210
+	qs422016 := string(qb422016.B)
+	//line api/server/templates/rows.qtpl:210
+	qt422016.ReleaseByteBuffer(qb422016)
+	//line api/server/templates/rows.qtpl:210
+	return qs422016
+//line api/server/templates/rows.qtpl:210
+}
+
+//line api/server/templates/rows.qtpl:211
+func (b ColorChangeBulbBox) StreamHTML(qw422016 *qt422016.Writer) {
+	//line api/server/templates/rows.qtpl:211
 	qw422016.N().S(`
 <div class="col-lg-4">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
-	//line api/server/templates/rows.qtpl:209
+	//line api/server/templates/rows.qtpl:215
 	qw422016.E().S(b.Title)
-	//line api/server/templates/rows.qtpl:209
+	//line api/server/templates/rows.qtpl:215
 	qw422016.N().S(`</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
@@ -581,67 +679,87 @@ func (b ColorChangeBulbBox) StreamHTML(qw422016 *qt422016.Writer) {
                     <div class="ibox-content">
                     <p>
                         <button class="btn btn-primary btn-large-dim" type="button" `)
-	//line api/server/templates/rows.qtpl:218
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 255)
-	//line api/server/templates/rows.qtpl:218
+	//line api/server/templates/rows.qtpl:224
+	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Switch Multilevel", 255)
+	//line api/server/templates/rows.qtpl:224
 	qw422016.N().S(`><i class="fa fa-power-off"></i></button>
                         <button class="btn btn-danger btn-large-dim" type="button" `)
-	//line api/server/templates/rows.qtpl:219
-	StreamOnClickSetValue(qw422016, b.ProviderID, b.DeviceID, 0)
-	//line api/server/templates/rows.qtpl:219
+	//line api/server/templates/rows.qtpl:225
+	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Switch Multilevel", 0)
+	//line api/server/templates/rows.qtpl:225
 	qw422016.N().S(`><i class="fa fa-power-off"></i></button>
                     </p>
                     <p>
-                        <button class="btn btn-danger" type="button">R</button>
-                        <button class="btn btn-primary" type="button">G</button>
-                        <button class="btn btn-success" type="button">B</button>
-                        <button class="btn btn-default" type="button">CW</button>
-                        <button class="btn btn-default" type="button">WW</button>
+                        <button class="btn btn-danger" type="button" `)
+	//line api/server/templates/rows.qtpl:228
+	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Color Control Red Channel", 255)
+	//line api/server/templates/rows.qtpl:228
+	qw422016.N().S(`>R</button>
+                        <button class="btn btn-primary" type="button" `)
+	//line api/server/templates/rows.qtpl:229
+	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Color Control Green Channel", 255)
+	//line api/server/templates/rows.qtpl:229
+	qw422016.N().S(`>G</button>
+                        <button class="btn btn-success" type="button" `)
+	//line api/server/templates/rows.qtpl:230
+	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Color Control Blue Channel", 255)
+	//line api/server/templates/rows.qtpl:230
+	qw422016.N().S(`>B</button>
+                        <button class="btn btn-default" type="button" `)
+	//line api/server/templates/rows.qtpl:231
+	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Color Control Cold_White Channel", 255)
+	//line api/server/templates/rows.qtpl:231
+	qw422016.N().S(`>CW</button>
+                        <button class="btn btn-default" type="button" `)
+	//line api/server/templates/rows.qtpl:232
+	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Color Control Warm_White Channel", 255)
+	//line api/server/templates/rows.qtpl:232
+	qw422016.N().S(`>WW</button>
                     </p>
                     </div>
                 </div>
             </div>
 `)
-//line api/server/templates/rows.qtpl:231
+//line api/server/templates/rows.qtpl:237
 }
 
-//line api/server/templates/rows.qtpl:231
+//line api/server/templates/rows.qtpl:237
 func (b ColorChangeBulbBox) WriteHTML(qq422016 qtio422016.Writer) {
-	//line api/server/templates/rows.qtpl:231
+	//line api/server/templates/rows.qtpl:237
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/rows.qtpl:231
+	//line api/server/templates/rows.qtpl:237
 	b.StreamHTML(qw422016)
-	//line api/server/templates/rows.qtpl:231
+	//line api/server/templates/rows.qtpl:237
 	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/rows.qtpl:231
+//line api/server/templates/rows.qtpl:237
 }
 
-//line api/server/templates/rows.qtpl:231
+//line api/server/templates/rows.qtpl:237
 func (b ColorChangeBulbBox) HTML() string {
-	//line api/server/templates/rows.qtpl:231
+	//line api/server/templates/rows.qtpl:237
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/rows.qtpl:231
+	//line api/server/templates/rows.qtpl:237
 	b.WriteHTML(qb422016)
-	//line api/server/templates/rows.qtpl:231
+	//line api/server/templates/rows.qtpl:237
 	qs422016 := string(qb422016.B)
-	//line api/server/templates/rows.qtpl:231
+	//line api/server/templates/rows.qtpl:237
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/rows.qtpl:231
+	//line api/server/templates/rows.qtpl:237
 	return qs422016
-//line api/server/templates/rows.qtpl:231
+//line api/server/templates/rows.qtpl:237
 }
 
-//line api/server/templates/rows.qtpl:232
+//line api/server/templates/rows.qtpl:238
 func (b SonosBox) StreamHTML(qw422016 *qt422016.Writer) {
-	//line api/server/templates/rows.qtpl:232
+	//line api/server/templates/rows.qtpl:238
 	qw422016.N().S(`
 <div class="col-lg-4">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
-	//line api/server/templates/rows.qtpl:236
+	//line api/server/templates/rows.qtpl:242
 	qw422016.E().S(b.Title)
-	//line api/server/templates/rows.qtpl:236
+	//line api/server/templates/rows.qtpl:242
 	qw422016.N().S(`</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
@@ -650,53 +768,65 @@ func (b SonosBox) StreamHTML(qw422016 *qt422016.Writer) {
                         </div>
                     </div>
                     <div class="ibox-content">
-                    <button class="btn btn-default btn-large-dim" type="button"><i class="fa fa-play"></i></button>
-                    <button class="btn btn-default btn-large-dim" type="button"><i class="fa fa-pause"></i></button>
-                    <button class="btn btn-default btn-large-dim" type="button"><i class="fa fa-step-forward"></i></button>
+                    <button class="btn btn-default btn-large-dim" type="button" `)
+	//line api/server/templates/rows.qtpl:250
+	StreamOnClickInvokeDeviceAction(qw422016, b.ProviderID, b.DeviceID, "Play")
+	//line api/server/templates/rows.qtpl:250
+	qw422016.N().S(`><i class="fa fa-play"></i></button>
+                    <button class="btn btn-default btn-large-dim" type="button" `)
+	//line api/server/templates/rows.qtpl:251
+	StreamOnClickInvokeDeviceAction(qw422016, b.ProviderID, b.DeviceID, "Pause")
+	//line api/server/templates/rows.qtpl:251
+	qw422016.N().S(`><i class="fa fa-pause"></i></button>
+                    <button class="btn btn-default btn-large-dim" type="button" `)
+	//line api/server/templates/rows.qtpl:252
+	StreamOnClickInvokeDeviceAction(qw422016, b.ProviderID, b.DeviceID, "Next")
+	//line api/server/templates/rows.qtpl:252
+	qw422016.N().S(`><i class="fa fa-step-forward"></i></button>
                     </div>
                 </div>
             </div>
 `)
-//line api/server/templates/rows.qtpl:250
+//line api/server/templates/rows.qtpl:256
 }
 
-//line api/server/templates/rows.qtpl:250
+//line api/server/templates/rows.qtpl:256
 func (b SonosBox) WriteHTML(qq422016 qtio422016.Writer) {
-	//line api/server/templates/rows.qtpl:250
+	//line api/server/templates/rows.qtpl:256
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/rows.qtpl:250
+	//line api/server/templates/rows.qtpl:256
 	b.StreamHTML(qw422016)
-	//line api/server/templates/rows.qtpl:250
+	//line api/server/templates/rows.qtpl:256
 	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/rows.qtpl:250
+//line api/server/templates/rows.qtpl:256
 }
 
-//line api/server/templates/rows.qtpl:250
+//line api/server/templates/rows.qtpl:256
 func (b SonosBox) HTML() string {
-	//line api/server/templates/rows.qtpl:250
+	//line api/server/templates/rows.qtpl:256
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/rows.qtpl:250
+	//line api/server/templates/rows.qtpl:256
 	b.WriteHTML(qb422016)
-	//line api/server/templates/rows.qtpl:250
+	//line api/server/templates/rows.qtpl:256
 	qs422016 := string(qb422016.B)
-	//line api/server/templates/rows.qtpl:250
+	//line api/server/templates/rows.qtpl:256
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/rows.qtpl:250
+	//line api/server/templates/rows.qtpl:256
 	return qs422016
-//line api/server/templates/rows.qtpl:250
+//line api/server/templates/rows.qtpl:256
 }
 
-//line api/server/templates/rows.qtpl:251
+//line api/server/templates/rows.qtpl:257
 func (b TivoBox) StreamHTML(qw422016 *qt422016.Writer) {
-	//line api/server/templates/rows.qtpl:251
+	//line api/server/templates/rows.qtpl:257
 	qw422016.N().S(`
 <div class="col-lg-4">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
-	//line api/server/templates/rows.qtpl:255
+	//line api/server/templates/rows.qtpl:261
 	qw422016.E().S(b.Title)
-	//line api/server/templates/rows.qtpl:255
+	//line api/server/templates/rows.qtpl:261
 	qw422016.N().S(`</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
@@ -713,46 +843,46 @@ func (b TivoBox) StreamHTML(qw422016 *qt422016.Writer) {
                 </div>
             </div>
 `)
-//line api/server/templates/rows.qtpl:270
+//line api/server/templates/rows.qtpl:276
 }
 
-//line api/server/templates/rows.qtpl:270
+//line api/server/templates/rows.qtpl:276
 func (b TivoBox) WriteHTML(qq422016 qtio422016.Writer) {
-	//line api/server/templates/rows.qtpl:270
+	//line api/server/templates/rows.qtpl:276
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/rows.qtpl:270
+	//line api/server/templates/rows.qtpl:276
 	b.StreamHTML(qw422016)
-	//line api/server/templates/rows.qtpl:270
+	//line api/server/templates/rows.qtpl:276
 	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/rows.qtpl:270
+//line api/server/templates/rows.qtpl:276
 }
 
-//line api/server/templates/rows.qtpl:270
+//line api/server/templates/rows.qtpl:276
 func (b TivoBox) HTML() string {
-	//line api/server/templates/rows.qtpl:270
+	//line api/server/templates/rows.qtpl:276
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/rows.qtpl:270
+	//line api/server/templates/rows.qtpl:276
 	b.WriteHTML(qb422016)
-	//line api/server/templates/rows.qtpl:270
+	//line api/server/templates/rows.qtpl:276
 	qs422016 := string(qb422016.B)
-	//line api/server/templates/rows.qtpl:270
+	//line api/server/templates/rows.qtpl:276
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/rows.qtpl:270
+	//line api/server/templates/rows.qtpl:276
 	return qs422016
-//line api/server/templates/rows.qtpl:270
+//line api/server/templates/rows.qtpl:276
 }
 
-//line api/server/templates/rows.qtpl:272
+//line api/server/templates/rows.qtpl:278
 func (b DoorLockBox) StreamHTML(qw422016 *qt422016.Writer) {
-	//line api/server/templates/rows.qtpl:272
+	//line api/server/templates/rows.qtpl:278
 	qw422016.N().S(`
 <div class="col-lg-4">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
-	//line api/server/templates/rows.qtpl:276
+	//line api/server/templates/rows.qtpl:282
 	qw422016.E().S(b.Title)
-	//line api/server/templates/rows.qtpl:276
+	//line api/server/templates/rows.qtpl:282
 	qw422016.N().S(`</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
@@ -767,46 +897,46 @@ func (b DoorLockBox) StreamHTML(qw422016 *qt422016.Writer) {
                 </div>
             </div>
 `)
-//line api/server/templates/rows.qtpl:289
+//line api/server/templates/rows.qtpl:295
 }
 
-//line api/server/templates/rows.qtpl:289
+//line api/server/templates/rows.qtpl:295
 func (b DoorLockBox) WriteHTML(qq422016 qtio422016.Writer) {
-	//line api/server/templates/rows.qtpl:289
+	//line api/server/templates/rows.qtpl:295
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/rows.qtpl:289
+	//line api/server/templates/rows.qtpl:295
 	b.StreamHTML(qw422016)
-	//line api/server/templates/rows.qtpl:289
+	//line api/server/templates/rows.qtpl:295
 	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/rows.qtpl:289
+//line api/server/templates/rows.qtpl:295
 }
 
-//line api/server/templates/rows.qtpl:289
+//line api/server/templates/rows.qtpl:295
 func (b DoorLockBox) HTML() string {
-	//line api/server/templates/rows.qtpl:289
+	//line api/server/templates/rows.qtpl:295
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/rows.qtpl:289
+	//line api/server/templates/rows.qtpl:295
 	b.WriteHTML(qb422016)
-	//line api/server/templates/rows.qtpl:289
+	//line api/server/templates/rows.qtpl:295
 	qs422016 := string(qb422016.B)
-	//line api/server/templates/rows.qtpl:289
+	//line api/server/templates/rows.qtpl:295
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/rows.qtpl:289
+	//line api/server/templates/rows.qtpl:295
 	return qs422016
-//line api/server/templates/rows.qtpl:289
+//line api/server/templates/rows.qtpl:295
 }
 
-//line api/server/templates/rows.qtpl:290
+//line api/server/templates/rows.qtpl:296
 func (b DeviceBox) StreamHTML(qw422016 *qt422016.Writer) {
-	//line api/server/templates/rows.qtpl:290
+	//line api/server/templates/rows.qtpl:296
 	qw422016.N().S(`
 <div class="col-lg-4">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
-	//line api/server/templates/rows.qtpl:294
+	//line api/server/templates/rows.qtpl:300
 	qw422016.E().S(b.Title)
-	//line api/server/templates/rows.qtpl:294
+	//line api/server/templates/rows.qtpl:300
 	qw422016.N().S(`</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
@@ -817,90 +947,90 @@ func (b DeviceBox) StreamHTML(qw422016 *qt422016.Writer) {
                     <div class="ibox-content">
                         <p>
                             `)
-	//line api/server/templates/rows.qtpl:303
+	//line api/server/templates/rows.qtpl:309
 	for _, action := range b.Actions {
-		//line api/server/templates/rows.qtpl:303
+		//line api/server/templates/rows.qtpl:309
 		qw422016.N().S(`
                                 <button type="button" class="btn btn-w-m btn-default">`)
-		//line api/server/templates/rows.qtpl:304
+		//line api/server/templates/rows.qtpl:310
 		qw422016.E().S(action.Title)
-		//line api/server/templates/rows.qtpl:304
+		//line api/server/templates/rows.qtpl:310
 		qw422016.N().S(`</button>
                             `)
-		//line api/server/templates/rows.qtpl:305
+		//line api/server/templates/rows.qtpl:311
 	}
-	//line api/server/templates/rows.qtpl:305
+	//line api/server/templates/rows.qtpl:311
 	qw422016.N().S(`
                         </p>
                         `)
-	//line api/server/templates/rows.qtpl:307
+	//line api/server/templates/rows.qtpl:313
 	for _, child := range b.Children {
-		//line api/server/templates/rows.qtpl:307
+		//line api/server/templates/rows.qtpl:313
 		qw422016.N().S(`
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h5 class="panel-title">
                                         <a>`)
-		//line api/server/templates/rows.qtpl:311
+		//line api/server/templates/rows.qtpl:317
 		qw422016.E().S(child.Title)
-		//line api/server/templates/rows.qtpl:311
+		//line api/server/templates/rows.qtpl:317
 		qw422016.N().S(`</a>
                                     </h5>
                                 </div>
                                 <div>
                                     <div class="panel-body">
                                         `)
-		//line api/server/templates/rows.qtpl:316
+		//line api/server/templates/rows.qtpl:322
 		for _, action := range child.Actions {
-			//line api/server/templates/rows.qtpl:316
+			//line api/server/templates/rows.qtpl:322
 			qw422016.N().S(`
                                             <button type="button" class="btn btn-w-m btn-default">`)
-			//line api/server/templates/rows.qtpl:317
+			//line api/server/templates/rows.qtpl:323
 			qw422016.E().S(action.Title)
-			//line api/server/templates/rows.qtpl:317
+			//line api/server/templates/rows.qtpl:323
 			qw422016.N().S(`</button>
                                         `)
-			//line api/server/templates/rows.qtpl:318
+			//line api/server/templates/rows.qtpl:324
 		}
-		//line api/server/templates/rows.qtpl:318
+		//line api/server/templates/rows.qtpl:324
 		qw422016.N().S(`
                                     </div>
                                 </div>
                             </div>
                         `)
-		//line api/server/templates/rows.qtpl:322
+		//line api/server/templates/rows.qtpl:328
 	}
-	//line api/server/templates/rows.qtpl:322
+	//line api/server/templates/rows.qtpl:328
 	qw422016.N().S(`
                     </div>
                 </div>
             </div>
 `)
-//line api/server/templates/rows.qtpl:326
+//line api/server/templates/rows.qtpl:332
 }
 
-//line api/server/templates/rows.qtpl:326
+//line api/server/templates/rows.qtpl:332
 func (b DeviceBox) WriteHTML(qq422016 qtio422016.Writer) {
-	//line api/server/templates/rows.qtpl:326
+	//line api/server/templates/rows.qtpl:332
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/rows.qtpl:326
+	//line api/server/templates/rows.qtpl:332
 	b.StreamHTML(qw422016)
-	//line api/server/templates/rows.qtpl:326
+	//line api/server/templates/rows.qtpl:332
 	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/rows.qtpl:326
+//line api/server/templates/rows.qtpl:332
 }
 
-//line api/server/templates/rows.qtpl:326
+//line api/server/templates/rows.qtpl:332
 func (b DeviceBox) HTML() string {
-	//line api/server/templates/rows.qtpl:326
+	//line api/server/templates/rows.qtpl:332
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/rows.qtpl:326
+	//line api/server/templates/rows.qtpl:332
 	b.WriteHTML(qb422016)
-	//line api/server/templates/rows.qtpl:326
+	//line api/server/templates/rows.qtpl:332
 	qs422016 := string(qb422016.B)
-	//line api/server/templates/rows.qtpl:326
+	//line api/server/templates/rows.qtpl:332
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/rows.qtpl:326
+	//line api/server/templates/rows.qtpl:332
 	return qs422016
-//line api/server/templates/rows.qtpl:326
+//line api/server/templates/rows.qtpl:332
 }
