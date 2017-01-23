@@ -17,12 +17,16 @@ type Device interface {
 	Matches(Match) bool
 	ListChildren() []Device
 	ListActions() []Action
+	ListTypes() []Type
 	GetLocationOne() string
 	GetLocationTwo() string
-	GetTypes() []string
 }
 
 type Action interface {
+	GetName() string
+}
+
+type Type interface {
 	GetName() string
 }
 

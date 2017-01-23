@@ -58,8 +58,8 @@ func (c *Context) Room(rw web.ResponseWriter, req *web.Request) {
 }
 
 func DeviceToBox(device apimodels.Device) (templates.Box, bool) {
-	for i, devicetype := range device.GetTypes() {
-		switch devicetype {
+	for i, devicetype := range device.ListTypes() {
+		switch devicetype.GetName() {
 		case "Z-Wave Entry Control Root Device":
 			return DoorLockBox(device)
 		case "Z-Wave Switch Multilevel Root Device":

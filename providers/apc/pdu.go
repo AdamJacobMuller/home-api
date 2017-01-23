@@ -81,12 +81,22 @@ type Outlet struct {
 	State bool
 }
 
+type APCType struct {
+	Name string
+}
+
+func (t *APCType) GetName() string {
+	return t.Name
+}
+
 func (o *Outlet) Print() {
 	fmt.Printf("%s [#%d, Phase = %d, State = %t ]\n", o.Name, o.Index, o.Phase, o.State)
 }
 
-func (o *Outlet) GetTypes() []string {
-	return []string{"Binary Switch"}
+func (o *Outlet) ListTypes() []apimodels.Type {
+	var t []apimodels.Type
+	t = append(t, &APCType{Name: "Binary Switch"})
+	return t
 }
 func (o *Outlet) ListChildren() []apimodels.Device {
 	r := make([]apimodels.Device, 0)

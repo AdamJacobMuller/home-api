@@ -51,8 +51,8 @@ func (d *ExampleDevice) ListChildren() []apimodels.Device {
 func (d *ExampleDevice) ListActions() []apimodels.Action {
 	return []apimodels.Action{}
 }
-func (d *ExampleDevice) GetTypes() []string {
-	return []string{}
+func (d *ExampleDevice) ListTypes() []apimodels.Type {
+	return []apimodels.Type{}
 }
 func (d *ExampleDevice) SetValue(float64) bool {
 	return false

@@ -38,6 +38,14 @@ func (c *API) GetAndUnmarshal(path string, object interface{}) error {
 	return nil
 }
 
+type HSType struct {
+	Name string
+}
+
+func (t *HSType) GetName() string {
+	return t.Name
+}
+
 type HSAction struct {
 	API      *API
 	DeviceID int
@@ -60,20 +68,20 @@ type HSDevice struct {
 	Actions     []*HSAction
 }
 
-func (d *HSDevice) GetTypes() []string {
-	var r []string
+func (d *HSDevice) ListTypes() []apimodels.Type {
+	var r []apimodels.Type
 
 	if d.TypeString != "" {
-		r = append(r, d.TypeString)
+		r = append(r, &HSType{Name: d.TypeString})
 	}
 	if d.DeviceType.Device_SubType_Description != "" {
-		r = append(r, d.DeviceType.Device_SubType_Description)
+		r = append(r, &HSType{Name: d.DeviceType.Device_SubType_Description})
 	}
 	if d.DeviceType.Device_Type_Description != "" {
-		r = append(r, d.DeviceType.Device_Type_Description)
+		r = append(r, &HSType{Name: d.DeviceType.Device_Type_Description})
 	}
 	if d.DeviceType.Device_API_Description != "" {
-		r = append(r, d.DeviceType.Device_API_Description)
+		r = append(r, &HSType{Name: d.DeviceType.Device_API_Description})
 	}
 	return r
 }
