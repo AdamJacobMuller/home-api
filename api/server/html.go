@@ -44,6 +44,7 @@ func (c *Context) Room(rw web.ResponseWriter, req *web.Request) {
 	LocationTwo := req.PathParams["LocationTwo"]
 	rowtemplate := &templates.Rows{}
 	c.Layout.Body = rowtemplate
+	c.Layout.Title = fmt.Sprintf("Home / %s / %s", LocationOne, LocationTwo)
 
 	boxrow := &templates.GenericRow{}
 	rowtemplate.AddRow(boxrow)

@@ -21,6 +21,11 @@ var (
 func (p *BasePage) StreamNavTop(qw422016 *qt422016.Writer) {
 	//line api/server/templates/base-top.qtpl:1
 	qw422016.N().S(`
+        `)
+	//line api/server/templates/base-top.qtpl:2
+	if false {
+		//line api/server/templates/base-top.qtpl:2
+		qw422016.N().S(`
         <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
@@ -142,34 +147,38 @@ func (p *BasePage) StreamNavTop(qw422016 *qt422016.Writer) {
                     </a>
                 </li>
             </ul>
-
         </nav>
+        `)
+		//line api/server/templates/base-top.qtpl:125
+	}
+	//line api/server/templates/base-top.qtpl:125
+	qw422016.N().S(`
 `)
-//line api/server/templates/base-top.qtpl:125
+//line api/server/templates/base-top.qtpl:126
 }
 
-//line api/server/templates/base-top.qtpl:125
+//line api/server/templates/base-top.qtpl:126
 func (p *BasePage) WriteNavTop(qq422016 qtio422016.Writer) {
-	//line api/server/templates/base-top.qtpl:125
+	//line api/server/templates/base-top.qtpl:126
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/base-top.qtpl:125
+	//line api/server/templates/base-top.qtpl:126
 	p.StreamNavTop(qw422016)
-	//line api/server/templates/base-top.qtpl:125
+	//line api/server/templates/base-top.qtpl:126
 	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/base-top.qtpl:125
+//line api/server/templates/base-top.qtpl:126
 }
 
-//line api/server/templates/base-top.qtpl:125
+//line api/server/templates/base-top.qtpl:126
 func (p *BasePage) NavTop() string {
-	//line api/server/templates/base-top.qtpl:125
+	//line api/server/templates/base-top.qtpl:126
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/base-top.qtpl:125
+	//line api/server/templates/base-top.qtpl:126
 	p.WriteNavTop(qb422016)
-	//line api/server/templates/base-top.qtpl:125
+	//line api/server/templates/base-top.qtpl:126
 	qs422016 := string(qb422016.B)
-	//line api/server/templates/base-top.qtpl:125
+	//line api/server/templates/base-top.qtpl:126
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/base-top.qtpl:125
+	//line api/server/templates/base-top.qtpl:126
 	return qs422016
-//line api/server/templates/base-top.qtpl:125
+//line api/server/templates/base-top.qtpl:126
 }
