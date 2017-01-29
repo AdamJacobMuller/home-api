@@ -31,6 +31,7 @@ type JSON_Device struct {
 	ProviderID  string        `json:"ProviderID"`
 	Children    []JSON_Device `json:"Children,omitempty"`
 	Actions     []JSON_Action `json:"Actions,omitempty"`
+	Hidden      bool          `json:"Hidden"`
 }
 
 func (d *JSON_Device) AddChild(device JSON_Device) {
@@ -52,6 +53,7 @@ func DeviceTOJSON(device apimodels.Device) (json_device JSON_Device) {
 		ProviderID:  device.ProviderIDString(),
 		LocationOne: device.GetLocationOne(),
 		LocationTwo: device.GetLocationTwo(),
+		Hidden:      device.IsHidden(),
 	}
 
 	for _, typestring := range device.ListTypes() {
