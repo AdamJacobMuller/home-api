@@ -226,7 +226,7 @@ func (p GenericRow) HTML() string {
 func (b GenericBox) StreamHTML(qw422016 *qt422016.Writer) {
 	//line api/server/templates/rows.qtpl:106
 	qw422016.N().S(`
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
@@ -306,7 +306,7 @@ func (b GenericBox) HTML() string {
 func (b BinarySwitchBox) StreamHTML(qw422016 *qt422016.Writer) {
 	//line api/server/templates/rows.qtpl:151
 	qw422016.N().S(`
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
@@ -370,7 +370,7 @@ func (b BinarySwitchBox) HTML() string {
 func (b DimmableSwitchBox) StreamHTML(qw422016 *qt422016.Writer) {
 	//line api/server/templates/rows.qtpl:171
 	qw422016.N().S(`
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
@@ -662,7 +662,7 @@ func OnClickInvokeChildDeviceAction(ProviderID string, DeviceID string, ChildNam
 func (b ColorChangeBulbBox) StreamHTML(qw422016 *qt422016.Writer) {
 	//line api/server/templates/rows.qtpl:211
 	qw422016.N().S(`
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
@@ -692,27 +692,27 @@ func (b ColorChangeBulbBox) StreamHTML(qw422016 *qt422016.Writer) {
                     <p>
                         <button class="btn btn-danger" type="button" `)
 	//line api/server/templates/rows.qtpl:228
-	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Color Control Red Channel", 255)
+	StreamOnClickInvokeDeviceAction(qw422016, b.ProviderID, b.DeviceID, "Red")
 	//line api/server/templates/rows.qtpl:228
 	qw422016.N().S(`>R</button>
                         <button class="btn btn-primary" type="button" `)
 	//line api/server/templates/rows.qtpl:229
-	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Color Control Green Channel", 255)
+	StreamOnClickInvokeDeviceAction(qw422016, b.ProviderID, b.DeviceID, "Green")
 	//line api/server/templates/rows.qtpl:229
 	qw422016.N().S(`>G</button>
                         <button class="btn btn-success" type="button" `)
 	//line api/server/templates/rows.qtpl:230
-	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Color Control Blue Channel", 255)
+	StreamOnClickInvokeDeviceAction(qw422016, b.ProviderID, b.DeviceID, "Blue")
 	//line api/server/templates/rows.qtpl:230
 	qw422016.N().S(`>B</button>
                         <button class="btn btn-default" type="button" `)
 	//line api/server/templates/rows.qtpl:231
-	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Color Control Cold_White Channel", 255)
+	StreamOnClickInvokeDeviceAction(qw422016, b.ProviderID, b.DeviceID, "Cold White")
 	//line api/server/templates/rows.qtpl:231
 	qw422016.N().S(`>CW</button>
                         <button class="btn btn-default" type="button" `)
 	//line api/server/templates/rows.qtpl:232
-	StreamOnClickSetChildDeviceValue(qw422016, b.ProviderID, b.DeviceID, "Color Control Warm_White Channel", 255)
+	StreamOnClickInvokeDeviceAction(qw422016, b.ProviderID, b.DeviceID, "Warm White")
 	//line api/server/templates/rows.qtpl:232
 	qw422016.N().S(`>WW</button>
                     </p>
@@ -753,7 +753,7 @@ func (b ColorChangeBulbBox) HTML() string {
 func (b SonosBox) StreamHTML(qw422016 *qt422016.Writer) {
 	//line api/server/templates/rows.qtpl:238
 	qw422016.N().S(`
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
@@ -820,7 +820,7 @@ func (b SonosBox) HTML() string {
 func (b TivoBox) StreamHTML(qw422016 *qt422016.Writer) {
 	//line api/server/templates/rows.qtpl:257
 	qw422016.N().S(`
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
@@ -876,7 +876,7 @@ func (b TivoBox) HTML() string {
 func (b DoorLockBox) StreamHTML(qw422016 *qt422016.Writer) {
 	//line api/server/templates/rows.qtpl:278
 	qw422016.N().S(`
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)
@@ -930,7 +930,7 @@ func (b DoorLockBox) HTML() string {
 func (b DeviceBox) StreamHTML(qw422016 *qt422016.Writer) {
 	//line api/server/templates/rows.qtpl:296
 	qw422016.N().S(`
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>`)

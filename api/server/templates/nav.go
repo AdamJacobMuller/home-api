@@ -4,6 +4,7 @@ type BasePage struct {
 	NavSections []*NavSection
 	NavHeader   bool
 	MiniNavBar  bool
+	Title       string
 	Body        Body
 }
 

@@ -15,76 +15,46 @@ import (
 //
 // Base page implementation. Other pages may inherit from it if they need
 // overriding only certain Page methods
+//
+//
 
-//line api/server/templates/base.qtpl:5
+//line api/server/templates/base.qtpl:7
 var (
 	_ = qtio422016.Copy
 	_ = qt422016.AcquireByteBuffer
 )
 
-//line api/server/templates/base.qtpl:5
-func (p *BasePage) StreamTitle(qw422016 *qt422016.Writer) {
-//line api/server/templates/base.qtpl:5
-qw422016.N().S(`This is a base title`) }
+//line api/server/templates/base.qtpl:7
+type NotFound struct{}
 
-//line api/server/templates/base.qtpl:5
-//line api/server/templates/base.qtpl:5
-func (p *BasePage) WriteTitle(qq422016 qtio422016.Writer) {
-	//line api/server/templates/base.qtpl:5
+//line api/server/templates/base.qtpl:8
+func (p NotFound) StreamHTML(qw422016 *qt422016.Writer) {
+//line api/server/templates/base.qtpl:8
+qw422016.N().S(`404 file not found`) }
+
+//line api/server/templates/base.qtpl:8
+//line api/server/templates/base.qtpl:8
+func (p NotFound) WriteHTML(qq422016 qtio422016.Writer) {
+	//line api/server/templates/base.qtpl:8
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/base.qtpl:5
-	p.StreamTitle(qw422016)
-	//line api/server/templates/base.qtpl:5
+	//line api/server/templates/base.qtpl:8
+	p.StreamHTML(qw422016)
+	//line api/server/templates/base.qtpl:8
 	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/base.qtpl:5
-}
-
-//line api/server/templates/base.qtpl:5
-func (p *BasePage) Title() string {
-	//line api/server/templates/base.qtpl:5
-	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/base.qtpl:5
-	p.WriteTitle(qb422016)
-	//line api/server/templates/base.qtpl:5
-	qs422016 := string(qb422016.B)
-	//line api/server/templates/base.qtpl:5
-	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/base.qtpl:5
-	return qs422016
-//line api/server/templates/base.qtpl:5
+//line api/server/templates/base.qtpl:8
 }
 
 //line api/server/templates/base.qtpl:8
-type NotFound struct{}
-
-//line api/server/templates/base.qtpl:9
-func (p NotFound) StreamHTML(qw422016 *qt422016.Writer) {
-//line api/server/templates/base.qtpl:9
-qw422016.N().S(`404 file not found`) }
-
-//line api/server/templates/base.qtpl:9
-//line api/server/templates/base.qtpl:9
-func (p NotFound) WriteHTML(qq422016 qtio422016.Writer) {
-	//line api/server/templates/base.qtpl:9
-	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/base.qtpl:9
-	p.StreamHTML(qw422016)
-	//line api/server/templates/base.qtpl:9
-	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/base.qtpl:9
-}
-
-//line api/server/templates/base.qtpl:9
 func (p NotFound) HTML() string {
-	//line api/server/templates/base.qtpl:9
+	//line api/server/templates/base.qtpl:8
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/base.qtpl:9
+	//line api/server/templates/base.qtpl:8
 	p.WriteHTML(qb422016)
-	//line api/server/templates/base.qtpl:9
+	//line api/server/templates/base.qtpl:8
 	qs422016 := string(qb422016.B)
-	//line api/server/templates/base.qtpl:9
+	//line api/server/templates/base.qtpl:8
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/base.qtpl:9
+	//line api/server/templates/base.qtpl:8
 	return qs422016
-//line api/server/templates/base.qtpl:9
+//line api/server/templates/base.qtpl:8
 }

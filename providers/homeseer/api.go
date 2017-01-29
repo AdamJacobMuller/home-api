@@ -46,11 +46,14 @@ func (t *HSType) GetName() string {
 	return t.Name
 }
 
+type HSActionFunction func(*HSDevice, *HSAction) bool
+
 type HSAction struct {
 	API      *API
 	DeviceID int
 	Label    string
 	Value    float64
+	Function HSActionFunction
 }
 type HSDevice struct {
 	ID          int
@@ -125,6 +128,12 @@ func (h *HSDevice) ListChildren() []apimodels.Device {
 }
 
 func (h *HSDevice) InvokeAction(label string) bool {
+	for _, action := range h.Actions {
+		log.WithFields(log.Fields{"Invoke/Label": label, "Action.Label": action.Label, "Action.Function": action.Function}).Info("searching for function")
+		if action.Label == label && action.Function != nil {
+			return action.Function(h, action)
+		}
+	}
 	url := fmt.Sprintf("JSON?request=controldevicebylabel&ref=%d&label=%s", h.ID, label)
 	json_devices := &JD_HSDevices{}
 	err := h.API.GetAndUnmarshal(url, json_devices)
@@ -316,6 +325,14 @@ func (h *HSController) GetDevice(find apimodels.Match) (apimodels.Device, bool) 
 	return &HSDevice{}, false
 }
 
+func (d *HSDevice) GetChildDevice(find apimodels.Match) apimodels.Device {
+	for _, device := range d.Children {
+		if device.Matches(find) {
+			return device
+		}
+	}
+	return &HSDevice{}
+}
 func (h *HSController) GetChildDevice(find apimodels.Match) (apimodels.Device, bool) {
 	var cLookup apimodels.Match
 	var ok bool
@@ -377,6 +394,9 @@ func (h *HSDevice) Print() {
 func (h *HSDevice) SetControls(actions []*HSAction) {
 	h.Actions = actions
 }
+func (h *HSDevice) AddActionFunction(label string, function HSActionFunction) {
+	h.Actions = append(h.Actions, &HSAction{Label: label, Function: function})
+}
 func (h *HSDevice) AddChild(device *HSDevice) {
 	device.Parent = h
 	h.Children = append(h.Children, device)
@@ -424,6 +444,17 @@ func (h *HSController) Load() {
 				pdevice.AddChild(nd)
 			} else {
 				hold_devices[parent_id] = append(hold_devices[parent_id], nd)
+			}
+		}
+		for _, devicetype := range nd.ListTypes() {
+			switch devicetype.GetName() {
+			case "Z-Wave Switch Multilevel Root Device":
+				nd.AddActionFunction("Red", ZWSML_Red)
+				nd.AddActionFunction("Green", ZWSML_Green)
+				nd.AddActionFunction("Blue", ZWSML_Blue)
+				nd.AddActionFunction("Warm White", ZWSML_Warm_White)
+				nd.AddActionFunction("Cold White", ZWSML_Cold_White)
+				nd.AddActionFunction("White", ZWSML_Warm_White)
 			}
 		}
 	}

@@ -32,7 +32,7 @@ func StreamPageTemplate(qw422016 *qt422016.Writer, p *BasePage) {
 
     <title>`)
 	//line api/server/templates/base-page.qtpl:11
-	p.StreamTitle(qw422016)
+	qw422016.E().S(p.Title)
 	//line api/server/templates/base-page.qtpl:11
 	qw422016.N().S(`</title>
 
@@ -47,57 +47,56 @@ func StreamPageTemplate(qw422016 *qt422016.Writer, p *BasePage) {
 
     <link href="/static/css/animate.css" rel="stylesheet">
     <link href="/static/css/style.css" rel="stylesheet">
-
 </head>
 
 <body class="`)
-	//line api/server/templates/base-page.qtpl:27
+	//line api/server/templates/base-page.qtpl:26
 	if p.MiniNavBar {
-		//line api/server/templates/base-page.qtpl:27
+		//line api/server/templates/base-page.qtpl:26
 		qw422016.N().S(`mini-navbar`)
-		//line api/server/templates/base-page.qtpl:27
+		//line api/server/templates/base-page.qtpl:26
 	}
-	//line api/server/templates/base-page.qtpl:27
+	//line api/server/templates/base-page.qtpl:26
 	qw422016.N().S(`">
     <div id="wrapper">
         `)
-	//line api/server/templates/base-page.qtpl:29
+	//line api/server/templates/base-page.qtpl:28
 	p.StreamNavLeft(qw422016)
-	//line api/server/templates/base-page.qtpl:29
+	//line api/server/templates/base-page.qtpl:28
 	qw422016.N().S(`
         <div id="page-wrapper" class="gray-bg dashbard-1" style="min-height: 392px;">
             <div class="row border-bottom">
                 `)
-	//line api/server/templates/base-page.qtpl:32
+	//line api/server/templates/base-page.qtpl:31
 	p.StreamNavTop(qw422016)
-	//line api/server/templates/base-page.qtpl:32
+	//line api/server/templates/base-page.qtpl:31
 	qw422016.N().S(`
             </div> <!-- navtop row -->
             `)
-	//line api/server/templates/base-page.qtpl:34
+	//line api/server/templates/base-page.qtpl:33
 	if p.Body == nil {
-		//line api/server/templates/base-page.qtpl:34
+		//line api/server/templates/base-page.qtpl:33
 		qw422016.N().S(`
                 BasePage.Body is unset
             `)
-		//line api/server/templates/base-page.qtpl:36
+		//line api/server/templates/base-page.qtpl:35
 	} else {
-		//line api/server/templates/base-page.qtpl:36
+		//line api/server/templates/base-page.qtpl:35
 		qw422016.N().S(`
                 `)
-		//line api/server/templates/base-page.qtpl:37
+		//line api/server/templates/base-page.qtpl:36
 		p.Body.StreamHTML(qw422016)
-		//line api/server/templates/base-page.qtpl:37
+		//line api/server/templates/base-page.qtpl:36
 		qw422016.N().S(`
             `)
-		//line api/server/templates/base-page.qtpl:38
+		//line api/server/templates/base-page.qtpl:37
 	}
-	//line api/server/templates/base-page.qtpl:38
+	//line api/server/templates/base-page.qtpl:37
 	qw422016.N().S(`
             `)
-	//line api/server/templates/base-page.qtpl:39
+	//line api/server/templates/base-page.qtpl:38
 	p.StreamFooter(qw422016)
-	//line api/server/templates/base-page.qtpl:39
+	//line api/server/templates/base-page.qtpl:38
 	qw422016.N().S(`
         </div> <!-- page-wrapper -->
     </div> <!-- wrapper -->
@@ -125,49 +124,34 @@ func StreamPageTemplate(qw422016 *qt422016.Writer, p *BasePage) {
 
     <!-- jQuery UI -->
     <script src="/static/js/plugins/jquery-ui/jquery-ui.min.js"></script>
-
-    <!-- GITTER -->
-    <script src="/static/js/plugins/gritter/jquery.gritter.min.js"></script>
-
-    <!-- Sparkline -->
-    <!-- <script src="/static/js/plugins/sparkline/jquery.sparkline.min.js"></script> -->
-
-    <!-- Sparkline demo data  -->
-    <!-- <script src="/static/js/demo/sparkline-demo.js"></script> -->
-
-    <!-- ChartJS-->
-    <!-- <script src="/static/js/plugins/chartJs/Chart.min.js"></script> -->
-
-    <!-- Toastr -->
-    <!-- <script src="/static/js/plugins/toastr/toastr.min.js"></script> -->
 </body>
 </html>
 `)
-//line api/server/templates/base-page.qtpl:83
+//line api/server/templates/base-page.qtpl:67
 }
 
-//line api/server/templates/base-page.qtpl:83
+//line api/server/templates/base-page.qtpl:67
 func WritePageTemplate(qq422016 qtio422016.Writer, p *BasePage) {
-	//line api/server/templates/base-page.qtpl:83
+	//line api/server/templates/base-page.qtpl:67
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/base-page.qtpl:83
+	//line api/server/templates/base-page.qtpl:67
 	StreamPageTemplate(qw422016, p)
-	//line api/server/templates/base-page.qtpl:83
+	//line api/server/templates/base-page.qtpl:67
 	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/base-page.qtpl:83
+//line api/server/templates/base-page.qtpl:67
 }
 
-//line api/server/templates/base-page.qtpl:83
+//line api/server/templates/base-page.qtpl:67
 func PageTemplate(p *BasePage) string {
-	//line api/server/templates/base-page.qtpl:83
+	//line api/server/templates/base-page.qtpl:67
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/base-page.qtpl:83
+	//line api/server/templates/base-page.qtpl:67
 	WritePageTemplate(qb422016, p)
-	//line api/server/templates/base-page.qtpl:83
+	//line api/server/templates/base-page.qtpl:67
 	qs422016 := string(qb422016.B)
-	//line api/server/templates/base-page.qtpl:83
+	//line api/server/templates/base-page.qtpl:67
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/base-page.qtpl:83
+	//line api/server/templates/base-page.qtpl:67
 	return qs422016
-//line api/server/templates/base-page.qtpl:83
+//line api/server/templates/base-page.qtpl:67
 }

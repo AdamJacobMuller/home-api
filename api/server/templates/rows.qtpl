@@ -104,7 +104,7 @@ interface Box {
     </div>
 {% endfunc %}
 {% func (b GenericBox) HTML() %}
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>{%s b.Title%}</h5>
@@ -149,7 +149,7 @@ interface Box {
 {% endfunc %}
 
 {% func (b BinarySwitchBox) HTML() %}
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>{%s b.Title%}</h5>
@@ -169,7 +169,7 @@ interface Box {
             </div>
 {% endfunc %}
 {% func (b DimmableSwitchBox) HTML() %}
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>{%s b.Title%}</h5>
@@ -209,7 +209,7 @@ onclick="$.ajax({type: 'POST', url: '/api/SetChildDevicesValue', data: JSON.stri
 onclick="$.ajax({type: 'POST', url: '/api/InvokeChildDevicesAction', data: JSON.stringify({match:{ProviderID: '{%s ProviderID %}', DeviceID: '{%s DeviceID%}', Child: {Name: '{%s ChildName%}'}}, action: {%s action %}}), success: function(data){console.log(data);}, dataType: 'json'});"
 {% endfunc %}
 {% func (b ColorChangeBulbBox) HTML() %}
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>{%s b.Title%}</h5>
@@ -225,18 +225,18 @@ onclick="$.ajax({type: 'POST', url: '/api/InvokeChildDevicesAction', data: JSON.
                         <button class="btn btn-danger btn-large-dim" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Switch Multilevel", 0) %}><i class="fa fa-power-off"></i></button>
                     </p>
                     <p>
-                        <button class="btn btn-danger" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Color Control Red Channel", 255) %}>R</button>
-                        <button class="btn btn-primary" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Color Control Green Channel", 255) %}>G</button>
-                        <button class="btn btn-success" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Color Control Blue Channel", 255) %}>B</button>
-                        <button class="btn btn-default" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Color Control Cold_White Channel", 255) %}>CW</button>
-                        <button class="btn btn-default" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Color Control Warm_White Channel", 255) %}>WW</button>
+                        <button class="btn btn-danger" type="button" {%= OnClickInvokeDeviceAction(b.ProviderID, b.DeviceID, "Red") %}>R</button>
+                        <button class="btn btn-primary" type="button" {%= OnClickInvokeDeviceAction(b.ProviderID, b.DeviceID, "Green") %}>G</button>
+                        <button class="btn btn-success" type="button" {%= OnClickInvokeDeviceAction(b.ProviderID, b.DeviceID, "Blue") %}>B</button>
+                        <button class="btn btn-default" type="button" {%= OnClickInvokeDeviceAction(b.ProviderID, b.DeviceID, "Cold White") %}>CW</button>
+                        <button class="btn btn-default" type="button" {%= OnClickInvokeDeviceAction(b.ProviderID, b.DeviceID, "Warm White") %}>WW</button>
                     </p>
                     </div>
                 </div>
             </div>
 {% endfunc %}
 {% func (b SonosBox) HTML() %}
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>{%s b.Title%}</h5>
@@ -255,7 +255,7 @@ onclick="$.ajax({type: 'POST', url: '/api/InvokeChildDevicesAction', data: JSON.
             </div>
 {% endfunc %}
 {% func (b TivoBox) HTML() %}
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>{%s b.Title%}</h5>
@@ -276,7 +276,7 @@ onclick="$.ajax({type: 'POST', url: '/api/InvokeChildDevicesAction', data: JSON.
 {% endfunc %}
 
 {% func (b DoorLockBox) HTML() %}
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>{%s b.Title%}</h5>
@@ -294,7 +294,7 @@ onclick="$.ajax({type: 'POST', url: '/api/InvokeChildDevicesAction', data: JSON.
             </div>
 {% endfunc %}
 {% func (b DeviceBox) HTML() %}
-<div class="col-lg-4">
+<div class="col-lg-4 grid-item">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>{%s b.Title%}</h5>
