@@ -101,6 +101,9 @@ func (o *Outlet) ListTypes() []apimodels.Type {
 func (o *Outlet) HasChildDevice(find apimodels.Match) bool {
 	return false
 }
+func (o *Outlet) IsHidden() bool {
+	return false
+}
 func (o *Outlet) GetChildDevice(find apimodels.Match) apimodels.Device {
 	return &Outlet{}
 }

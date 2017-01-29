@@ -51,6 +51,9 @@ func (d *ExampleDevice) HasChildDevice(find apimodels.Match) bool {
 func (d *ExampleDevice) GetChildDevice(find apimodels.Match) apimodels.Device {
 	return &ExampleDevice{}
 }
+func (d *ExampleDevice) IsHidden() bool {
+	return false
+}
 func (d *ExampleDevice) ListChildren() []apimodels.Device {
 	return []apimodels.Device{}
 }

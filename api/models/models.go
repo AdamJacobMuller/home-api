@@ -22,6 +22,7 @@ type Device interface {
 	GetLocationTwo() string
 	GetChildDevice(Match) Device
 	HasChildDevice(Match) bool
+	IsHidden() bool
 }
 
 type Action interface {

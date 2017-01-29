@@ -69,8 +69,12 @@ type HSDevice struct {
 	Parent      *HSDevice
 	DeviceType  *JD_HSDeviceType
 	Actions     []*HSAction
+	Hidden      bool
 }
 
+func (d *HSDevice) IsHidden() bool {
+	return d.Hidden
+}
 func (d *HSDevice) ListTypes() []apimodels.Type {
 	var r []apimodels.Type
 
@@ -508,6 +512,9 @@ func (h *HSController) Load() {
 			for _, childMatch := range mapping.Children {
 				children, _ := getDevices(listDevices, childMatch)
 				for _, child := range children.Devices {
+					if mapping.HideChildren {
+						child.Hidden = true
+					}
 					log.WithFields(log.Fields{"parent": parent, "child": child}).Info("adding Child to Parent")
 					parent.AddChild(child)
 				}
@@ -554,8 +561,9 @@ type HSConfiguration struct {
 }
 
 type ChildMapping struct {
-	Parent   apimodels.Match   `json:"Parent"`
-	Children []apimodels.Match `json:"Children"`
+	Parent       apimodels.Match   `json:"Parent"`
+	Children     []apimodels.Match `json:"Children"`
+	HideChildren bool              `json:"HideChildren"`
 }
 
 func (h *HSController) Create(configurationRaw json.RawMessage) bool {

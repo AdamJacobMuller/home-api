@@ -50,6 +50,9 @@ func (c *Context) Room(rw web.ResponseWriter, req *web.Request) {
 
 	match := apimodels.Match{"LocationOne": LocationOne, "LocationTwo": LocationTwo}
 	for _, device := range c.apiserver.Controller.GetDevices(match) {
+		if device.IsHidden() {
+			continue
+		}
 		box, ok := DeviceToBox(device)
 		if ok {
 			boxrow.AddBox(box)
