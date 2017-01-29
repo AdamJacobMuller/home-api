@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"github.com/AdamJacobMuller/home-api/api/controller"
 	"github.com/AdamJacobMuller/home-api/api/models"
+	"github.com/AdamJacobMuller/weblogrus"
 	"github.com/GeertJohan/go.rice"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gocraft/web"
-	//"github.com/meatballhat/negroni-logrus"
 	"io/ioutil"
 	"net/http"
 )
@@ -122,7 +122,8 @@ func NewAPIServer() *APIServer {
 		ctx.apiserver = apiserver
 		next(resp, req)
 	})
-	router.Middleware(web.LoggerMiddleware)
+	x := weblogrus.NewMiddleware()
+	router.Middleware(x.ServeHTTP)
 	router.Middleware(web.ShowErrorsMiddleware)
 
 	admin := router.Subrouter(Context{}, "/")
