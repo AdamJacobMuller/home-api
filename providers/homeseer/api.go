@@ -109,6 +109,7 @@ type HSController struct {
 	UpdateInterval time.Duration
 	Devices        []*HSDevice
 	ChildMapping   []ChildMapping
+	HideDevices    []apimodels.Match
 }
 
 func (c *HSController) IDString() string {
@@ -506,6 +507,12 @@ func (h *HSController) Load() {
 		listDevices = append(listDevices, device)
 	}
 
+	for _, find := range h.HideDevices {
+		devices, _ := getDevices(listDevices, find)
+		for _, device := range devices.Devices {
+			device.Hidden = true
+		}
+	}
 	for _, mapping := range h.ChildMapping {
 		parents, _ := getDevices(listDevices, mapping.Parent)
 		for _, parent := range parents.Devices {
@@ -555,9 +562,10 @@ func (h *HSController) BGUpdate() {
 }
 
 type HSConfiguration struct {
-	API            string          `json:"API"`
-	UpdateInterval int             `json:"UpdateInterval"`
-	ChildMapping   *[]ChildMapping `json:"ChildMapping"`
+	API            string            `json:"API"`
+	UpdateInterval int               `json:"UpdateInterval"`
+	ChildMapping   []ChildMapping    `json:"ChildMapping"`
+	HideDevices    []apimodels.Match `json:"HideDevices"`
 }
 
 type ChildMapping struct {
@@ -586,7 +594,8 @@ func (h *HSController) Create(configurationRaw json.RawMessage) bool {
 	} else {
 		h.UpdateInterval = time.Duration(time.Duration(configuration.UpdateInterval) * time.Second)
 	}
-	h.ChildMapping = *configuration.ChildMapping
+	h.ChildMapping = configuration.ChildMapping
+	h.HideDevices = configuration.HideDevices
 	h.Load()
 	go h.BGUpdate()
 	return true
