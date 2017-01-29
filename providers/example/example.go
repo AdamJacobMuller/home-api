@@ -45,6 +45,12 @@ func (p *ExampleProvider) IDString() string {
 type ExampleDevice struct {
 }
 
+func (d *ExampleDevice) HasChildDevice(find apimodels.Match) bool {
+	return false
+}
+func (d *ExampleDevice) GetChildDevice(find apimodels.Match) apimodels.Device {
+	return &ExampleDevice{}
+}
 func (d *ExampleDevice) ListChildren() []apimodels.Device {
 	return []apimodels.Device{}
 }

@@ -63,11 +63,15 @@ func DeviceToBox(device apimodels.Device) (templates.Box, bool) {
 		case "Z-Wave Entry Control Root Device":
 			return DoorLockBox(device)
 		case "Z-Wave Switch Multilevel Root Device":
-			return ColorChangeBulbBox(device)
+			return ColorChangeBulbBox(device, false)
 		case "Sonos Player Master Control":
 			return SonosBox(device)
 		case "Z-Wave Switch Binary":
-			return BinarySwitchBox(device)
+			if device.HasChildDevice(apimodels.Match{"TypeString": "Z-Wave Switch Multilevel Root Device"}) {
+				return ColorChangeBulbBox(device, true)
+			} else {
+				return BinarySwitchBox(device)
+			}
 		case "Z-Wave Switch Binary Root Device":
 			return BinarySwitchBox(device)
 		case "Z-Wave Switch Multilevel":
@@ -80,8 +84,8 @@ func DeviceToBox(device apimodels.Device) (templates.Box, bool) {
 	}
 	return GenericBox(device)
 }
-func ColorChangeBulbBox(device apimodels.Device) (templates.Box, bool) {
-	return templates.ColorChangeBulbBox{Title: device.GetName(), DeviceID: device.IDString(), ProviderID: device.ProviderIDString()}, true
+func ColorChangeBulbBox(device apimodels.Device, PowerControlRoot bool) (templates.Box, bool) {
+	return templates.ColorChangeBulbBox{Title: device.GetName(), DeviceID: device.IDString(), ProviderID: device.ProviderIDString(), PowerControlRoot: PowerControlRoot}, true
 }
 func DimmableSwitchBox(device apimodels.Device) (templates.Box, bool) {
 	return templates.DimmableSwitchBox{Title: device.GetName(), DeviceID: device.IDString(), ProviderID: device.ProviderIDString()}, true

@@ -98,6 +98,12 @@ func (o *Outlet) ListTypes() []apimodels.Type {
 	t = append(t, &APCType{Name: "Binary Switch"})
 	return t
 }
+func (o *Outlet) HasChildDevice(find apimodels.Match) bool {
+	return false
+}
+func (o *Outlet) GetChildDevice(find apimodels.Match) apimodels.Device {
+	return &Outlet{}
+}
 func (o *Outlet) ListChildren() []apimodels.Device {
 	r := make([]apimodels.Device, 0)
 	return r

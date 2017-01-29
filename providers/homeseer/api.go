@@ -104,6 +104,7 @@ type HSController struct {
 	API            *API
 	UpdateInterval time.Duration
 	Devices        []*HSDevice
+	ChildMapping   []ChildMapping
 }
 
 func (c *HSController) IDString() string {
@@ -316,6 +317,26 @@ func (h *HSController) GetDevices(find apimodels.Match) (apimodels.Devices, bool
 	}
 	return result, true
 }
+
+func getDevices(devices []*HSDevice, find apimodels.Match) (*HSResult, bool) {
+	result := &HSResult{}
+	for _, device := range devices {
+		if device.Matches(find) {
+			result.Add(device)
+		}
+	}
+	return result, true
+}
+
+func getDevice(devices []*HSDevice, find apimodels.Match) (*HSDevice, bool) {
+	for _, device := range devices {
+		if device.Matches(find) {
+			return device, true
+		}
+	}
+	return &HSDevice{}, false
+}
+
 func (h *HSController) GetDevice(find apimodels.Match) (apimodels.Device, bool) {
 	for _, device := range h.Devices {
 		if device.Matches(find) {
@@ -325,6 +346,24 @@ func (h *HSController) GetDevice(find apimodels.Match) (apimodels.Device, bool) 
 	return &HSDevice{}, false
 }
 
+func (d *HSDevice) HasChildDevice(find apimodels.Match) bool {
+	for _, device := range d.Children {
+		if device.Matches(find) {
+			return true
+		}
+	}
+	return false
+}
+
+func (d *HSDevice) GetChildDevices(find apimodels.Match) (apimodels.Devices, bool) {
+	result := &HSResult{}
+	for _, device := range d.Children {
+		if device.Matches(find) {
+			result.Add(device)
+		}
+	}
+	return result, true
+}
 func (d *HSDevice) GetChildDevice(find apimodels.Match) apimodels.Device {
 	for _, device := range d.Children {
 		if device.Matches(find) {
@@ -446,17 +485,6 @@ func (h *HSController) Load() {
 				hold_devices[parent_id] = append(hold_devices[parent_id], nd)
 			}
 		}
-		for _, devicetype := range nd.ListTypes() {
-			switch devicetype.GetName() {
-			case "Z-Wave Switch Multilevel Root Device":
-				nd.AddActionFunction("Red", ZWSML_Red)
-				nd.AddActionFunction("Green", ZWSML_Green)
-				nd.AddActionFunction("Blue", ZWSML_Blue)
-				nd.AddActionFunction("Warm White", ZWSML_Warm_White)
-				nd.AddActionFunction("Cold White", ZWSML_Cold_White)
-				nd.AddActionFunction("White", ZWSML_Warm_White)
-			}
-		}
 	}
 	for parent_id, device_l := range hold_devices {
 		for _, device := range device_l {
@@ -468,10 +496,48 @@ func (h *HSController) Load() {
 			}
 		}
 	}
+
 	listDevices := []*HSDevice{}
 	for _, device := range devices {
 		listDevices = append(listDevices, device)
 	}
+
+	for _, mapping := range h.ChildMapping {
+		parents, _ := getDevices(listDevices, mapping.Parent)
+		for _, parent := range parents.Devices {
+			for _, childMatch := range mapping.Children {
+				children, _ := getDevices(listDevices, childMatch)
+				for _, child := range children.Devices {
+					log.WithFields(log.Fields{"parent": parent, "child": child}).Info("adding Child to Parent")
+					parent.AddChild(child)
+				}
+			}
+		}
+	}
+
+	for _, device := range listDevices {
+		if device.HasChildDevice(apimodels.Match{"TypeString": "Z-Wave Switch Multilevel Root Device"}) {
+			device.AddActionFunction("Red", Child_ZWSML_Red)
+			device.AddActionFunction("Green", Child_ZWSML_Green)
+			device.AddActionFunction("Blue", Child_ZWSML_Blue)
+			device.AddActionFunction("Warm White", Child_ZWSML_Warm_White)
+			device.AddActionFunction("Cold White", Child_ZWSML_Cold_White)
+			device.AddActionFunction("White", Child_ZWSML_Warm_White)
+		}
+
+		for _, devicetype := range device.ListTypes() {
+			switch devicetype.GetName() {
+			case "Z-Wave Switch Multilevel Root Device":
+				device.AddActionFunction("Red", ZWSML_Red)
+				device.AddActionFunction("Green", ZWSML_Green)
+				device.AddActionFunction("Blue", ZWSML_Blue)
+				device.AddActionFunction("Warm White", ZWSML_Warm_White)
+				device.AddActionFunction("Cold White", ZWSML_Cold_White)
+				device.AddActionFunction("White", ZWSML_Warm_White)
+			}
+		}
+	}
+
 	h.Devices = listDevices
 }
 func (h *HSController) BGUpdate() {
@@ -482,8 +548,14 @@ func (h *HSController) BGUpdate() {
 }
 
 type HSConfiguration struct {
-	API            string `json:"API"`
-	UpdateInterval int    `json:"UpdateInterval"`
+	API            string          `json:"API"`
+	UpdateInterval int             `json:"UpdateInterval"`
+	ChildMapping   *[]ChildMapping `json:"ChildMapping"`
+}
+
+type ChildMapping struct {
+	Parent   apimodels.Match   `json:"Parent"`
+	Children []apimodels.Match `json:"Children"`
 }
 
 func (h *HSController) Create(configurationRaw json.RawMessage) bool {
@@ -506,6 +578,7 @@ func (h *HSController) Create(configurationRaw json.RawMessage) bool {
 	} else {
 		h.UpdateInterval = time.Duration(time.Duration(configuration.UpdateInterval) * time.Second)
 	}
+	h.ChildMapping = *configuration.ChildMapping
 	h.Load()
 	go h.BGUpdate()
 	return true

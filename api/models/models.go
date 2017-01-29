@@ -20,6 +20,8 @@ type Device interface {
 	ListTypes() []Type
 	GetLocationOne() string
 	GetLocationTwo() string
+	GetChildDevice(Match) Device
+	HasChildDevice(Match) bool
 }
 
 type Action interface {
