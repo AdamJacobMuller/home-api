@@ -522,7 +522,7 @@ func (h *HSController) Load() {
 					if mapping.HideChildren {
 						child.Hidden = true
 					}
-					log.WithFields(log.Fields{"parent": parent, "child": child}).Info("adding Child to Parent")
+					//log.WithFields(log.Fields{"parent": parent, "child": child}).Info("adding Child to Parent")
 					parent.AddChild(child)
 				}
 			}

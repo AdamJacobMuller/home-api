@@ -26,6 +26,16 @@ type DimmableSwitchBox struct {
     DeviceID string
     Device *apimodels.Device
 }
+type RedEyeBox struct {
+    Title string
+    ProviderID string
+    DeviceID string
+    Device *apimodels.Device
+    Actions []*Action
+}
+func (b *RedEyeBox) AddAction(action *Action) {
+    b.Actions = append(b.Actions, action)
+}
 type BinarySwitchBox struct {
     Title string
     ProviderID string
@@ -295,6 +305,27 @@ onclick="$.ajax({type: 'POST', url: '/api/InvokeChildDevicesAction', data: JSON.
                     <div class="ibox-content">
                     <button class="btn btn-primary btn-large-dim" type="button" {%= OnClickInvokeChildDeviceAction(b.ProviderID, b.DeviceID, "Lock", "Lock") %}><i class="fa fa-lock"></i></button>
                     <button class="btn btn-danger btn-large-dim" type="button" {%= OnClickInvokeChildDeviceAction(b.ProviderID, b.DeviceID, "Lock", "Unlock") %}><i class="fa fa-unlock"></i></button>
+                    </div>
+                </div>
+            </div>
+{% endfunc %}
+{% func (b RedEyeBox) HTML() %}
+<div class="col-lg-4 grid-item">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{%s b.Title%}</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <p>
+                            {% for _, action := range b.Actions %}
+                                <button type="button" class="btn btn-w-m btn-default" {%= OnClickInvokeDeviceAction(b.ProviderID, b.DeviceID, action.Title) %}>{%s action.Title %}</button>
+                            {% endfor %}
+                        </p>
                     </div>
                 </div>
             </div>

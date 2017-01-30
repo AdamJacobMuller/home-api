@@ -82,6 +82,8 @@ func DeviceToBox(device apimodels.Device) (templates.Box, bool) {
 			return DimmableSwitchBox(device)
 		case "TiVo":
 			return TivoBox(device)
+		case "RedEye":
+			return RedEyeBox(device)
 		default:
 			log.WithFields(log.Fields{"i": i, "type": devicetype, "name": device.GetName(), "id": device.IDString()}).Error("unable to locate matching device type")
 		}
@@ -102,6 +104,14 @@ func SonosBox(device apimodels.Device) (templates.Box, bool) {
 }
 func TivoBox(device apimodels.Device) (templates.Box, bool) {
 	return templates.TivoBox{Title: device.GetName(), DeviceID: device.IDString(), ProviderID: device.ProviderIDString()}, true
+}
+func RedEyeBox(device apimodels.Device) (templates.Box, bool) {
+	box := templates.RedEyeBox{Title: device.GetName(), DeviceID: device.IDString(), ProviderID: device.ProviderIDString()}
+	for _, action := range device.ListActions() {
+		boxAction := &templates.Action{Title: action.GetName()}
+		box.AddAction(boxAction)
+	}
+	return box, true
 }
 func DoorLockBox(device apimodels.Device) (templates.Box, bool) {
 	return templates.DoorLockBox{Title: device.GetName(), DeviceID: device.IDString(), ProviderID: device.ProviderIDString()}, true

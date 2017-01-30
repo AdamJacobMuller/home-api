@@ -5,6 +5,7 @@ import (
 	"github.com/AdamJacobMuller/home-api/providers/apc"
 	"github.com/AdamJacobMuller/home-api/providers/example"
 	"github.com/AdamJacobMuller/home-api/providers/homeseer"
+	"github.com/AdamJacobMuller/home-api/providers/redeye"
 
 	log "github.com/Sirupsen/logrus"
 
@@ -186,6 +187,8 @@ func (c *APIController) CreateProvider(providerRaw json.RawMessage) bool {
 		provider = &homeseer.HSController{}
 	case "APC PDU":
 		provider = &apc.PDU{}
+	case "RedEye":
+		provider = &redeye.RedEye{}
 	case "Example Provider":
 		provider = &example.ExampleProvider{}
 	default:
