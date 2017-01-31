@@ -149,6 +149,10 @@ func (a *RedEyeActivity) GetName() string {
 func (room *RedEyeRoom) ListActions() []apimodels.Action {
 	var actions []apimodels.Action
 
+	if len(room.Activities) == 0 {
+		return actions
+	}
+
 	actions = append(actions, &RedEyeActivity{Name: "Off"})
 
 	for _, roomi := range room.Activities {
