@@ -49,56 +49,41 @@ func StreamPageTemplate(qw422016 *qt422016.Writer, p *BasePage) {
     <link href="/static/css/style.css" rel="stylesheet">
 </head>
 
-<body class="`)
-	//line api/server/templates/base-page.qtpl:26
-	if p.MiniNavBar {
-		//line api/server/templates/base-page.qtpl:26
-		qw422016.N().S(`mini-navbar`)
-		//line api/server/templates/base-page.qtpl:26
-	}
-	//line api/server/templates/base-page.qtpl:26
-	qw422016.N().S(`">
+<body class="top-navigation">
     <div id="wrapper">
-        `)
-	//line api/server/templates/base-page.qtpl:28
-	p.StreamNavLeft(qw422016)
-	//line api/server/templates/base-page.qtpl:28
-	qw422016.N().S(`
-        <div id="page-wrapper" class="gray-bg dashbard-1" style="min-height: 392px;">
-            <div class="row border-bottom">
-                `)
-	//line api/server/templates/base-page.qtpl:31
+        <div id="page-wrapper" class="gray-bg">
+            `)
+	//line api/server/templates/base-page.qtpl:29
 	p.StreamNavTop(qw422016)
-	//line api/server/templates/base-page.qtpl:31
+	//line api/server/templates/base-page.qtpl:29
 	qw422016.N().S(`
-            </div> <!-- navtop row -->
-            `)
-	//line api/server/templates/base-page.qtpl:33
+            <div class="wrapper wrapper-content">
+                <div class="container">
+                `)
+	//line api/server/templates/base-page.qtpl:32
 	if p.Body == nil {
-		//line api/server/templates/base-page.qtpl:33
+		//line api/server/templates/base-page.qtpl:32
 		qw422016.N().S(`
-                BasePage.Body is unset
-            `)
-		//line api/server/templates/base-page.qtpl:35
+                    BasePage.Body is unset
+                `)
+		//line api/server/templates/base-page.qtpl:34
 	} else {
+		//line api/server/templates/base-page.qtpl:34
+		qw422016.N().S(`
+                    `)
+		//line api/server/templates/base-page.qtpl:35
+		p.Body.StreamHTML(qw422016)
 		//line api/server/templates/base-page.qtpl:35
 		qw422016.N().S(`
                 `)
 		//line api/server/templates/base-page.qtpl:36
-		p.Body.StreamHTML(qw422016)
-		//line api/server/templates/base-page.qtpl:36
-		qw422016.N().S(`
-            `)
-		//line api/server/templates/base-page.qtpl:37
 	}
-	//line api/server/templates/base-page.qtpl:37
+	//line api/server/templates/base-page.qtpl:36
 	qw422016.N().S(`
-            `)
-	//line api/server/templates/base-page.qtpl:38
-	p.StreamFooter(qw422016)
-	//line api/server/templates/base-page.qtpl:38
-	qw422016.N().S(`
-        </div> <!-- page-wrapper -->
+                </div> <!-- /container -->
+
+            </div> <!-- /wrapper -->
+        </div> <!-- /page-wrapper -->
     </div> <!-- wrapper -->
 
     <!-- Mainly scripts -->
@@ -127,31 +112,31 @@ func StreamPageTemplate(qw422016 *qt422016.Writer, p *BasePage) {
 </body>
 </html>
 `)
-//line api/server/templates/base-page.qtpl:67
+//line api/server/templates/base-page.qtpl:68
 }
 
-//line api/server/templates/base-page.qtpl:67
+//line api/server/templates/base-page.qtpl:68
 func WritePageTemplate(qq422016 qtio422016.Writer, p *BasePage) {
-	//line api/server/templates/base-page.qtpl:67
+	//line api/server/templates/base-page.qtpl:68
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/base-page.qtpl:67
+	//line api/server/templates/base-page.qtpl:68
 	StreamPageTemplate(qw422016, p)
-	//line api/server/templates/base-page.qtpl:67
+	//line api/server/templates/base-page.qtpl:68
 	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/base-page.qtpl:67
+//line api/server/templates/base-page.qtpl:68
 }
 
-//line api/server/templates/base-page.qtpl:67
+//line api/server/templates/base-page.qtpl:68
 func PageTemplate(p *BasePage) string {
-	//line api/server/templates/base-page.qtpl:67
+	//line api/server/templates/base-page.qtpl:68
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/base-page.qtpl:67
+	//line api/server/templates/base-page.qtpl:68
 	WritePageTemplate(qb422016, p)
-	//line api/server/templates/base-page.qtpl:67
+	//line api/server/templates/base-page.qtpl:68
 	qs422016 := string(qb422016.B)
-	//line api/server/templates/base-page.qtpl:67
+	//line api/server/templates/base-page.qtpl:68
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/base-page.qtpl:67
+	//line api/server/templates/base-page.qtpl:68
 	return qs422016
-//line api/server/templates/base-page.qtpl:67
+//line api/server/templates/base-page.qtpl:68
 }

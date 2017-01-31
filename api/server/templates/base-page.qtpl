@@ -23,20 +23,21 @@
     <link href="/static/css/style.css" rel="stylesheet">
 </head>
 
-<body class="{% if p.MiniNavBar %}mini-navbar{%endif%}">
+<body class="top-navigation">
     <div id="wrapper">
-        {%= p.NavLeft() %}
-        <div id="page-wrapper" class="gray-bg dashbard-1" style="min-height: 392px;">
-            <div class="row border-bottom">
-                {%= p.NavTop() %}
-            </div> <!-- navtop row -->
-            {%if p.Body == nil%}
-                BasePage.Body is unset
-            {% else %}
-                {%= p.Body.HTML() %}
-            {%endif%}
-            {%= p.Footer() %}
-        </div> <!-- page-wrapper -->
+        <div id="page-wrapper" class="gray-bg">
+            {%= p.NavTop() %}
+            <div class="wrapper wrapper-content">
+                <div class="container">
+                {%if p.Body == nil%}
+                    BasePage.Body is unset
+                {% else %}
+                    {%= p.Body.HTML() %}
+                {%endif%}
+                </div> <!-- /container -->
+
+            </div> <!-- /wrapper -->
+        </div> <!-- /page-wrapper -->
     </div> <!-- wrapper -->
 
     <!-- Mainly scripts -->
