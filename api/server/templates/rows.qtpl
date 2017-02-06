@@ -224,7 +224,7 @@ onclick="$.ajax({type: 'POST', url: '/api/InvokeChildDevicesAction', data: JSON.
                     <p>
                     {% if b.PowerControlRoot %}
                         <button class="btn btn-primary btn-large-dim" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 255)%}><i class="fa fa-power-off"></i></button>
-                        <button class="btn btn-danger btn-large-dim" type="button" {%= OnClickSetDeviceValue(b.ProviderID, b.DeviceID, 0)%}><i class="fa fa-power-off"></i></button>
+                        <button class="btn btn-danger btn-large-dim" type="button" {%= OnClickInvokeDeviceAction(b.ProviderID, b.DeviceID, "Off")%}><i class="fa fa-power-off"></i></button>
                     {% else %}
                         <button class="btn btn-primary btn-large-dim" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Switch Multilevel", 255) %}><i class="fa fa-power-off"></i></button>
                         <button class="btn btn-danger btn-large-dim" type="button" {%= OnClickSetChildDeviceValue(b.ProviderID, b.DeviceID, "Switch Multilevel", 0) %}><i class="fa fa-power-off"></i></button>
