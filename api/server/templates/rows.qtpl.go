@@ -693,7 +693,7 @@ func (b ColorChangeBulbBox) StreamHTML(qw422016 *qt422016.Writer) {
 		qw422016.N().S(`><i class="fa fa-power-off"></i></button>
                         <button class="btn btn-danger btn-large-dim" type="button" `)
 		//line api/server/templates/rows.qtpl:227
-		StreamOnClickSetDeviceValue(qw422016, b.ProviderID, b.DeviceID, 0)
+		StreamOnClickInvokeDeviceAction(qw422016, b.ProviderID, b.DeviceID, "Off")
 		//line api/server/templates/rows.qtpl:227
 		qw422016.N().S(`><i class="fa fa-power-off"></i></button>
                     `)
