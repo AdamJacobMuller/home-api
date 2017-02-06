@@ -92,51 +92,39 @@ func StreamPageTemplate(qw422016 *qt422016.Writer, p *BasePage) {
     <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="/static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <!-- Flot -->
-    <script src="/static/js/plugins/flot/jquery.flot.js"></script>
-    <script src="/static/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-    <script src="/static/js/plugins/flot/jquery.flot.spline.js"></script>
-    <script src="/static/js/plugins/flot/jquery.flot.resize.js"></script>
-    <script src="/static/js/plugins/flot/jquery.flot.pie.js"></script>
-
-    <!-- Peity -->
-    <script src="/static/js/plugins/peity/jquery.peity.min.js"></script>
-    <script src="/static/js/demo/peity-demo.js"></script>
-
     <!-- Custom and plugin javascript -->
     <script src="/static/js/inspinia.js"></script>
-    <script src="/static/js/plugins/pace/pace.min.js"></script>
 
     <!-- jQuery UI -->
     <script src="/static/js/plugins/jquery-ui/jquery-ui.min.js"></script>
 </body>
 </html>
 `)
-//line api/server/templates/base-page.qtpl:68
+//line api/server/templates/base-page.qtpl:56
 }
 
-//line api/server/templates/base-page.qtpl:68
+//line api/server/templates/base-page.qtpl:56
 func WritePageTemplate(qq422016 qtio422016.Writer, p *BasePage) {
-	//line api/server/templates/base-page.qtpl:68
+	//line api/server/templates/base-page.qtpl:56
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/base-page.qtpl:68
+	//line api/server/templates/base-page.qtpl:56
 	StreamPageTemplate(qw422016, p)
-	//line api/server/templates/base-page.qtpl:68
+	//line api/server/templates/base-page.qtpl:56
 	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/base-page.qtpl:68
+//line api/server/templates/base-page.qtpl:56
 }
 
-//line api/server/templates/base-page.qtpl:68
+//line api/server/templates/base-page.qtpl:56
 func PageTemplate(p *BasePage) string {
-	//line api/server/templates/base-page.qtpl:68
+	//line api/server/templates/base-page.qtpl:56
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/base-page.qtpl:68
+	//line api/server/templates/base-page.qtpl:56
 	WritePageTemplate(qb422016, p)
-	//line api/server/templates/base-page.qtpl:68
+	//line api/server/templates/base-page.qtpl:56
 	qs422016 := string(qb422016.B)
-	//line api/server/templates/base-page.qtpl:68
+	//line api/server/templates/base-page.qtpl:56
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/base-page.qtpl:68
+	//line api/server/templates/base-page.qtpl:56
 	return qs422016
-//line api/server/templates/base-page.qtpl:68
+//line api/server/templates/base-page.qtpl:56
 }
