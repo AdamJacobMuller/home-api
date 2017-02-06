@@ -531,6 +531,7 @@ func (h *HSController) Load() {
 
 	for _, device := range listDevices {
 		if device.HasChildDevice(apimodels.Match{"TypeString": "Z-Wave Switch Multilevel Root Device"}) {
+			device.AddActionFunction("Off", Child_ZWSML_Off)
 			device.AddActionFunction("Red", Child_ZWSML_Red)
 			device.AddActionFunction("Green", Child_ZWSML_Green)
 			device.AddActionFunction("Blue", Child_ZWSML_Blue)
