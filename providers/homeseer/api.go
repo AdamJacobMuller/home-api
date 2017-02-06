@@ -140,6 +140,9 @@ func (h *HSDevice) InvokeAction(label string) bool {
 			return action.Function(h, action)
 		}
 	}
+	return h.RealInvokeAction(label)
+}
+func (h *HSDevice) RealInvokeAction(label string) bool {
 	url := fmt.Sprintf("JSON?request=controldevicebylabel&ref=%d&label=%s", h.ID, label)
 	json_devices := &JD_HSDevices{}
 	err := h.API.GetAndUnmarshal(url, json_devices)
@@ -531,6 +534,7 @@ func (h *HSController) Load() {
 
 	for _, device := range listDevices {
 		if device.HasChildDevice(apimodels.Match{"TypeString": "Z-Wave Switch Multilevel Root Device"}) {
+			device.AddActionFunction("On", Child_ZWSML_On)
 			device.AddActionFunction("Off", Child_ZWSML_Off)
 			device.AddActionFunction("Red", Child_ZWSML_Red)
 			device.AddActionFunction("Green", Child_ZWSML_Green)
