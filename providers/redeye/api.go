@@ -49,7 +49,7 @@ func (c *API) Get(path string) ([]byte, error) {
 	} else {
 		url = fmt.Sprintf("%s%s", c.Base, path)
 	}
-	log.WithFields(log.Fields{"url": url}).Info("GetAndUnmarshal")
+	log.WithFields(log.Fields{"url": url}).Info("Get")
 	resp, err := http.Get(url)
 	if err != nil {
 		log.WithFields(log.Fields{"error": err}).Error("GET failed")
