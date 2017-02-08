@@ -10,6 +10,7 @@ import (
 	"github.com/gocraft/web"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 type APIServer struct {
@@ -122,8 +123,10 @@ func NewAPIServer() *APIServer {
 	var box *rice.Box
 	var directory http.FileSystem
 
-	if false {
-		directory = http.Dir("files/development")
+	_, err = os.Stat("api/server/files/development")
+
+	if err == nil {
+		directory = http.Dir("api/server/files/development")
 	} else {
 		box, err = conf.FindBox("files/production")
 		if err != nil {
