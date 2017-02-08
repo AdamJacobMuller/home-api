@@ -106,17 +106,6 @@ func NewAPIServer() *APIServer {
 
 	router.NotFound((*Context).NotFound)
 
-	conf := rice.Config{
-		LocateOrder: []rice.LocateMethod{rice.LocateFS, rice.LocateEmbedded, rice.LocateAppended},
-	}
-
-	box, err := conf.FindBox("files/insp")
-	if err != nil {
-		log.WithFields(log.Fields{"error": err}).Errorf("unable to find rice box")
-	} else {
-		router.Middleware(web.StaticMiddlewareFromDir(box.HTTPBox(), web.StaticOption{Prefix: "/static", IndexFile: "index.html"}))
-	}
-
 	router.Middleware(func(ctx *Context, resp web.ResponseWriter,
 		req *web.Request, next web.NextMiddlewareFunc) {
 		ctx.apiserver = apiserver
@@ -125,6 +114,26 @@ func NewAPIServer() *APIServer {
 	x := weblogrus.NewMiddleware()
 	router.Middleware(x.ServeHTTP)
 	router.Middleware(web.ShowErrorsMiddleware)
+
+	conf := rice.Config{
+		LocateOrder: []rice.LocateMethod{rice.LocateFS, rice.LocateEmbedded, rice.LocateAppended},
+	}
+	var err error
+	var box *rice.Box
+	var directory http.FileSystem
+
+	if false {
+		directory = http.Dir("files/development")
+	} else {
+		box, err = conf.FindBox("files/production")
+		if err != nil {
+			log.WithFields(log.Fields{"error": err}).Errorf("unable to find rice box")
+			directory = http.Dir("files/development")
+		} else {
+			directory = box.HTTPBox()
+		}
+	}
+	router.Middleware(web.StaticMiddlewareFromDir(directory, web.StaticOption{Prefix: "/static", IndexFile: "index.html"}))
 
 	admin := router.Subrouter(Context{}, "/")
 	admin.Middleware((*Context).DrawLayout)
