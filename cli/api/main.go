@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/AdamJacobMuller/home-api/api/server"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/namsral/flag"
 	"os"
 )

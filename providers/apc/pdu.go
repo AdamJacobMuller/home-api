@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/AdamJacobMuller/gosnmp"
 	"github.com/AdamJacobMuller/home-api/api/models"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"net"
 	"regexp"
 	"strings"

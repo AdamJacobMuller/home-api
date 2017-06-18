@@ -3,7 +3,7 @@ package apicontroller
 import (
 	"github.com/AdamJacobMuller/home-api/api/models"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 type JSON_Devices struct {

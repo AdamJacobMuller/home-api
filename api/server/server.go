@@ -6,7 +6,7 @@ import (
 	"github.com/AdamJacobMuller/home-api/api/models"
 	"github.com/AdamJacobMuller/weblogrus"
 	"github.com/GeertJohan/go.rice"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/gocraft/web"
 	"io/ioutil"
 	"net/http"

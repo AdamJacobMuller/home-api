@@ -7,7 +7,7 @@ import (
 	"github.com/AdamJacobMuller/home-api/providers/homeseer"
 	"github.com/AdamJacobMuller/home-api/providers/redeye"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 
 	"encoding/json"
 	"io/ioutil"

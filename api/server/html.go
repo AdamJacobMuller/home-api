@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/AdamJacobMuller/home-api/api/models"
 	"github.com/AdamJacobMuller/home-api/api/server/templates"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/gocraft/web"
 	"sort"
 )

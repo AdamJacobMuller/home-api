@@ -3,7 +3,7 @@ package redeye
 import (
 	"encoding/xml"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 )
