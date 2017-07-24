@@ -3,6 +3,7 @@ package apimodels
 type Match map[string]interface{}
 
 type ControlRequest struct {
+	Type   string  `json:"type"`
 	Match  Match   `json:"match"`
 	Value  float64 `json:"value,omitempty"`
 	Action string  `json:"action,omitempty"`
