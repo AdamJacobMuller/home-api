@@ -75,6 +75,7 @@ type HSDevice struct {
 func (d *HSDevice) IsHidden() bool {
 	return d.Hidden
 }
+
 func (d *HSDevice) ListTypes() []apimodels.Type {
 	var r []apimodels.Type
 
@@ -513,6 +514,7 @@ func (h *HSController) Load() {
 	for _, find := range h.HideDevices {
 		devices, _ := getDevices(listDevices, find)
 		for _, device := range devices.Devices {
+			log.WithFields(log.Fields{"device": device}).Info("hiding device")
 			device.Hidden = true
 		}
 	}
