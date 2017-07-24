@@ -4,6 +4,7 @@ import (
 	"github.com/AdamJacobMuller/home-api/api/models"
 	"github.com/AdamJacobMuller/home-api/providers/apc"
 	"github.com/AdamJacobMuller/home-api/providers/example"
+	"github.com/AdamJacobMuller/home-api/providers/friedrichlink"
 	"github.com/AdamJacobMuller/home-api/providers/homeseer"
 	"github.com/AdamJacobMuller/home-api/providers/redeye"
 
@@ -214,6 +215,8 @@ func (c *APIController) CreateProvider(providerRaw json.RawMessage) bool {
 		provider = &apc.PDU{}
 	case "RedEye":
 		provider = &redeye.RedEye{}
+	case "FriedrichLink":
+		provider = &friedrichlink.FriedrichLink{}
 	case "Example Provider":
 		provider = &example.ExampleProvider{}
 	default:
