@@ -33,6 +33,7 @@ type ControllerProvider interface {
 
 type APIController struct {
 	providers []ControllerProvider
+	triggers  Triggers
 }
 
 func (c *APIController) GetDevices(match apimodels.Match) []apimodels.Device {
@@ -101,6 +102,26 @@ func (c *APIController) MatchProvider(match apimodels.Match, provider Controller
 	return true
 }
 
+// SetDevicesValue
+// SetChildDevicesValue
+// InvokeDevicesAction
+// InvokeChildDevicesAction
+
+func (c *APIController) ControlRequest(req apimodels.ControlRequest) bool {
+	switch req.Type {
+	case "SetDevicesValue":
+		return c.SetDevicesValue(req.Match, req.Value)
+	case "SetChildDevicesValue":
+		return c.SetChildDevicesValue(req.Match, req.Value)
+	case "InvokeDevicesAction":
+		return c.InvokeDevicesAction(req.Match, req.Action)
+	case "InvokeChildDevicesAction":
+		return c.InvokeChildDevicesAction(req.Match, req.Action)
+	default:
+		log.WithFields(log.Fields{"type": req.Type}).Error("invalid ControlRequest type")
+		return false
+	}
+}
 func (c *APIController) SetDevicesValue(match apimodels.Match, value float64) bool {
 	for _, provider := range c.providers {
 		if c.MatchProvider(match, provider) {
@@ -128,6 +149,7 @@ func (c *APIController) InvokeChildDevicesAction(match apimodels.Match, action s
 	return true
 }
 func (c *APIController) InvokeDevicesAction(match apimodels.Match, action string) bool {
+	c.triggers.InvokeDevicesAction(c, "before", match, action)
 	for _, provider := range c.providers {
 		if c.MatchProvider(match, provider) {
 			provider.InvokeDevicesAction(match, action)
@@ -138,6 +160,7 @@ func (c *APIController) InvokeDevicesAction(match apimodels.Match, action string
 
 type Configuration struct {
 	Providers []json.RawMessage `json:"Providers"`
+	Triggers  []Trigger         `json:"Triggers"`
 }
 type ConfigurationProviderType struct {
 	ProviderType string `json:"ProviderType"`
@@ -164,9 +187,11 @@ func (c *APIController) LoadAndCreateProviders(filename string) bool {
 
 	err = json.Unmarshal(data, config)
 	if err != nil {
-		log.WithFields(log.Fields{"filename": filename, "error": err}).Error("unable to unmarshal file")
+		log.WithFields(log.Fields{"filename": filename, "error": err}).Fatal("unable to unmarshal file")
 		return false
 	}
+
+	c.triggers = Triggers{Triggers: config.Triggers}
 
 	for _, provider = range config.Providers {
 		go c.CreateProvider(provider)
