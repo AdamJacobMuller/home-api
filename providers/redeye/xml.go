@@ -47,20 +47,25 @@ type RedEyeActivity struct {
 func (p *RedEye) LoadData() {
 	root := &RedEyeRoot{}
 	p.API.GetAndUnmarshal("", root)
-	fmt.Printf("ROOT: %+v\n", root)
+	log.WithFields(log.Fields{
+		"root": root,
+	}).Info("got redeye root")
 
 	rooms := &RedEyeRooms{}
 	p.API.GetAndUnmarshal("rooms", rooms)
-	fmt.Printf("ROOMS: %+v\n", rooms)
+	log.WithFields(log.Fields{
+		"rooms": rooms,
+	}).Info("got redeye rooms")
 	for _, room := range rooms.Rooms {
 		room.RedEye = p
-		fmt.Printf("ROOM: %+v\n", room)
 		activities := &RedEyeActivities{}
 		p.API.GetAndUnmarshal(fmt.Sprintf("rooms/%s/activities", room.RoomID), activities)
 		room.Activities = activities.Activities
-		fmt.Printf("ACTIVITIES: %+v\n", activities)
+		log.WithFields(log.Fields{
+			"room":       room,
+			"activities": activities.Activities,
+		}).Info("got room activities")
 		for _, activity := range activities.Activities {
-			fmt.Printf("ACTIVITY: %+v\n", activity)
 			activity.Room = room
 		}
 	}
