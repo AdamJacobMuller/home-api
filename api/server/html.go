@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/AdamJacobMuller/home-api/api/models"
 	"github.com/AdamJacobMuller/home-api/api/server/templates"
-	log "github.com/sirupsen/logrus"
 	"github.com/gocraft/web"
+	log "github.com/sirupsen/logrus"
 	"sort"
 )
 
@@ -84,8 +84,10 @@ func DeviceToBox(device apimodels.Device) (templates.Box, bool) {
 			return TivoBox(device)
 		case "RedEye":
 			return RedEyeBox(device)
+		case "Thermostat":
+			return Thermostat(device)
 		default:
-			log.WithFields(log.Fields{"i": i, "type": devicetype, "name": device.GetName(), "id": device.IDString()}).Error("unable to locate matching device type")
+			log.WithFields(log.Fields{"i": i, "type": devicetype, "name": devicetype.GetName(), "id": device.IDString()}).Error("unable to locate matching device type")
 		}
 	}
 	return GenericBox(device)
@@ -104,6 +106,14 @@ func SonosBox(device apimodels.Device) (templates.Box, bool) {
 }
 func TivoBox(device apimodels.Device) (templates.Box, bool) {
 	return templates.TivoBox{Title: device.GetName(), DeviceID: device.IDString(), ProviderID: device.ProviderIDString()}, true
+}
+func Thermostat(device apimodels.Device) (templates.Box, bool) {
+	box := templates.Thermostat{Title: device.GetName(), DeviceID: device.IDString(), ProviderID: device.ProviderIDString()}
+	for _, action := range device.ListActions() {
+		boxAction := &templates.Action{Title: action.GetName()}
+		box.AddAction(boxAction)
+	}
+	return box, true
 }
 func RedEyeBox(device apimodels.Device) (templates.Box, bool) {
 	box := templates.RedEyeBox{Title: device.GetName(), DeviceID: device.IDString(), ProviderID: device.ProviderIDString()}
