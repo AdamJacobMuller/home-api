@@ -4,18 +4,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/AdamJacobMuller/home-api/api/models"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/publicsuffix"
 	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
-	"regexp"
 )
 
 type FriedrichLink struct {
 	username string
 	password string
 	client   *http.Client
+	devices  []*FriedrichLinkDevice
+	UserID   string
 }
 
 func (p *FriedrichLink) SetDevicesValue(apimodels.Match, float64) bool {
@@ -30,8 +32,15 @@ func (p *FriedrichLink) InvokeDevicesAction(apimodels.Match, string) bool {
 func (p *FriedrichLink) InvokeChildDevicesAction(apimodels.Match, string) bool {
 	return false
 }
-func (p *FriedrichLink) GetDevices(apimodels.Match) (apimodels.Devices, bool) {
-	return &FriedrichLinkList{}, false
+func (p *FriedrichLink) GetDevices(find apimodels.Match) (apimodels.Devices, bool) {
+	result := &FriedrichLinkList{}
+	for _, device := range p.devices {
+		if device.Matches(find) {
+			result.Add(device)
+		}
+	}
+	log.WithFields(log.Fields{}).Info("returning devices")
+	return result, true
 }
 func (p *FriedrichLink) GetDevice(apimodels.Match) (apimodels.Device, bool) {
 	return &FriedrichLinkDevice{}, false
@@ -75,17 +84,6 @@ func (p *FriedrichLink) Create(rawConfig json.RawMessage) bool {
 
 	return true
 }
-func (p *FriedrichLink) load() error {
-	data, err := p.get("https://friedrichlink.friedrich.com/user_pages.php")
-	if err != nil {
-		panic(err)
-	}
-	ndata := regexp.MustCompile("var unit = new Units\\(({.*})\\);").FindStringSubmatch(data)
-	fmt.Printf("%s\n", ndata[1])
-	fmt.Printf("len(ndata) == %d\n", len(ndata))
-	fmt.Printf("p.client.Jar: %+v\n", p.client.Jar)
-	return nil
-}
 
 func (p *FriedrichLink) get(url string) (string, error) {
 	resp, err := p.client.Get(url)
@@ -120,8 +118,8 @@ func (p *FriedrichLink) login() error {
 }
 
 func (p *FriedrichLink) TypeString() string {
-	return "FriedrichLinkType"
+	return "FriedrichLink"
 }
 func (p *FriedrichLink) IDString() string {
-	return "FriedrichLinkInstance"
+	return p.UserID
 }
