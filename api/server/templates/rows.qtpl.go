@@ -5,14 +5,14 @@
 package templates
 
 //line api/server/templates/rows.qtpl:1
+import "github.com/AdamJacobMuller/home-api/api/models"
+
+//line api/server/templates/rows.qtpl:3
 import (
 	qtio422016 "io"
 
 	qt422016 "github.com/valyala/quicktemplate"
 )
-
-//line api/server/templates/rows.qtpl:1
-import "github.com/AdamJacobMuller/home-api/api/models"
 
 //line api/server/templates/rows.qtpl:3
 var (
