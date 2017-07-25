@@ -30,7 +30,7 @@ func (d *FriedrichLinkDevice) ListActions() []apimodels.Action {
 	return []apimodels.Action{}
 }
 func (d *FriedrichLinkDevice) ListTypes() []apimodels.Type {
-	return []apimodels.Type{}
+	return []apimodels.Type{Thermostat{}}
 }
 func (d *FriedrichLinkDevice) SetValue(float64) bool {
 	return false
