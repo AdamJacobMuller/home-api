@@ -9,5 +9,8 @@ linux: templates
 run: templates
 	go run ${LDFLAGS} cli/api/main.go -configuration=config.json
 
+run-%: templates
+	go run ${LDFLAGS} cli/api/main.go -configuration=$*.json
+
 templates: api/server/templates/*.qtpl
 	qtc -dir api/server/templates
