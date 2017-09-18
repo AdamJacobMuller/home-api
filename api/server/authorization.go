@@ -7,6 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func (c *Context) Authenticate(w web.ResponseWriter, r *web.Request, next web.NextMiddlewareFunc) {
@@ -39,8 +40,9 @@ CheckBasicAuth:
 	if ok {
 		if c.apiserver.Controller.AuthorizeUsernamePassword(username, password) {
 			cookie := &http.Cookie{
-				Name:  "auth",
-				Value: base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", username, password))),
+				Name:    "auth",
+				Value:   base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", username, password))),
+				Expires: time.Now().Add(time.Hour * 24 * 365 * 10),
 			}
 			http.SetCookie(w, cookie)
 			next(w, r)
