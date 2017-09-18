@@ -33,8 +33,9 @@ type ControllerProvider interface {
 }
 
 type APIController struct {
-	providers []ControllerProvider
-	triggers  Triggers
+	providers      []ControllerProvider
+	triggers       Triggers
+	authentication []Authentication
 }
 
 func (c *APIController) GetDevices(match apimodels.Match) []apimodels.Device {
@@ -160,8 +161,9 @@ func (c *APIController) InvokeDevicesAction(match apimodels.Match, action string
 }
 
 type Configuration struct {
-	Providers []json.RawMessage `json:"Providers"`
-	Triggers  []Trigger         `json:"Triggers"`
+	Providers      []json.RawMessage `json:"Providers"`
+	Triggers       []Trigger         `json:"Triggers"`
+	Authentication []Authentication  `json:"Authentication"`
 }
 type ConfigurationProviderType struct {
 	ProviderType string `json:"ProviderType"`
@@ -197,6 +199,7 @@ func (c *APIController) LoadAndCreateProviders(filename string) bool {
 	for _, provider = range config.Providers {
 		go c.CreateProvider(provider)
 	}
+	c.authentication = config.Authentication
 
 	return true
 }
