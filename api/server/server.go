@@ -138,8 +138,8 @@ func NewAPIServer() *APIServer {
 			directory = box.HTTPBox()
 		}
 	}
-	router.Middleware(web.StaticMiddlewareFromDir(directory, web.StaticOption{Prefix: "/static", IndexFile: "index.html"}))
 	router.Middleware((*Context).Authenticate)
+	router.Middleware(web.StaticMiddlewareFromDir(directory, web.StaticOption{Prefix: "/static", IndexFile: "index.html"}))
 
 	admin := router.Subrouter(Context{}, "/")
 	admin.Middleware((*Context).DrawLayout)
