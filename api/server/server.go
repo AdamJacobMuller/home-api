@@ -116,6 +116,7 @@ func NewAPIServer() *APIServer {
 	})
 	x := weblogrus.NewMiddleware()
 	router.Middleware(x.ServeHTTP)
+	router.Middleware((*Context).Authenticate)
 	router.Middleware(web.ShowErrorsMiddleware)
 
 	conf := rice.Config{
@@ -138,7 +139,6 @@ func NewAPIServer() *APIServer {
 			directory = box.HTTPBox()
 		}
 	}
-	router.Middleware((*Context).Authenticate)
 	router.Middleware(web.StaticMiddlewareFromDir(directory, web.StaticOption{Prefix: "/static", IndexFile: "index.html"}))
 
 	admin := router.Subrouter(Context{}, "/")
