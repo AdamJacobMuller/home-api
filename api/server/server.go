@@ -32,6 +32,7 @@ func (a *APIServer) readAndUnmarshalJson(r *web.Request, object interface{}) boo
 	}
 	return true
 }
+
 func (a *APIServer) marshalAndWriteJson(w web.ResponseWriter, object interface{}) bool {
 	jsonDocument, err := json.Marshal(object)
 	if err != nil {
@@ -44,6 +45,7 @@ func (a *APIServer) marshalAndWriteJson(w web.ResponseWriter, object interface{}
 	w.Write(jsonDocument)
 	return true
 }
+
 func (a *APIServer) ListDevices(w web.ResponseWriter, r *web.Request) {
 	cr := a.Controller.ListDevices()
 	a.marshalAndWriteJson(w, cr)
@@ -137,6 +139,7 @@ func NewAPIServer() *APIServer {
 		}
 	}
 	router.Middleware(web.StaticMiddlewareFromDir(directory, web.StaticOption{Prefix: "/static", IndexFile: "index.html"}))
+	router.Middleware((*Context).Authenticate)
 
 	admin := router.Subrouter(Context{}, "/")
 	admin.Middleware((*Context).DrawLayout)
