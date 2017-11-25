@@ -70,34 +70,35 @@ func (b Thermostat) StreamHTML(qw422016 *qt422016.Writer) {
 	}
 	//line api/server/templates/row_thermostat.qtpl:28
 	qw422016.N().S(`
+                            TEST
                         </p>
                     </div>
 `)
-//line api/server/templates/row_thermostat.qtpl:31
+//line api/server/templates/row_thermostat.qtpl:32
 }
 
-//line api/server/templates/row_thermostat.qtpl:31
+//line api/server/templates/row_thermostat.qtpl:32
 func (b Thermostat) WriteHTML(qq422016 qtio422016.Writer) {
-	//line api/server/templates/row_thermostat.qtpl:31
+	//line api/server/templates/row_thermostat.qtpl:32
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line api/server/templates/row_thermostat.qtpl:31
+	//line api/server/templates/row_thermostat.qtpl:32
 	b.StreamHTML(qw422016)
-	//line api/server/templates/row_thermostat.qtpl:31
+	//line api/server/templates/row_thermostat.qtpl:32
 	qt422016.ReleaseWriter(qw422016)
-//line api/server/templates/row_thermostat.qtpl:31
+//line api/server/templates/row_thermostat.qtpl:32
 }
 
-//line api/server/templates/row_thermostat.qtpl:31
+//line api/server/templates/row_thermostat.qtpl:32
 func (b Thermostat) HTML() string {
-	//line api/server/templates/row_thermostat.qtpl:31
+	//line api/server/templates/row_thermostat.qtpl:32
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line api/server/templates/row_thermostat.qtpl:31
+	//line api/server/templates/row_thermostat.qtpl:32
 	b.WriteHTML(qb422016)
-	//line api/server/templates/row_thermostat.qtpl:31
+	//line api/server/templates/row_thermostat.qtpl:32
 	qs422016 := string(qb422016.B)
-	//line api/server/templates/row_thermostat.qtpl:31
+	//line api/server/templates/row_thermostat.qtpl:32
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line api/server/templates/row_thermostat.qtpl:31
+	//line api/server/templates/row_thermostat.qtpl:32
 	return qs422016
-//line api/server/templates/row_thermostat.qtpl:31
+//line api/server/templates/row_thermostat.qtpl:32
 }
