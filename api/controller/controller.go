@@ -223,6 +223,9 @@ func (c *APIController) CreateProvider(providerRaw json.RawMessage) bool {
 	case "Example Provider":
 		provider = &example.ExampleProvider{}
 	default:
+		log.WithFields(log.Fields{
+			"type": pt.ProviderType,
+		}).Error("unknown provider type")
 		return false
 	}
 	if provider.Create(providerRaw) {
