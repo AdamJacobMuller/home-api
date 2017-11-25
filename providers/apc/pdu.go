@@ -437,33 +437,53 @@ func (p *PDU) Load() {
 	}
 	p.Outlets = outlets
 }
+func (p *PDU) log() *log.Entry {
+	if p == nil {
+		return log.WithFields(log.Fields{
+			"type": "APC PDU",
+			"pdu":  "PDU object is nil",
+		})
+	}
+	return log.WithFields(log.Fields{
+		"ip":   p.IP.String(),
+		"type": "APC PDU",
+		"name": p.Name,
+	})
+}
+
 func (p *PDU) Init() {
-	p.SNMP = &(*gosnmp.Default)
+	p.SNMP = &gosnmp.GoSNMP{}
+	p.SNMP.Port = 161
 	p.SNMP.Target = p.IP.String()
 	p.SNMP.Version = gosnmp.Version2c
 	p.SNMP.Timeout = time.Duration(10 * time.Second)
 	p.SNMP.Community = p.Community
 	err := p.SNMP.Connect()
+	p.log().Info("Init starting")
+
 	if err != nil {
-		log.WithFields(log.Fields{"ip": p.IP.String(), "community": p.Community, "error": err}).Error("unable to connect to SNMP target")
+		p.log().WithFields(log.Fields{
+			"community": p.Community,
+			"error":     err,
+		}).Error("unable to connect to SNMP target")
 		return
 	}
 
 	result, err := p.SNMP.Get([]string{".1.3.6.1.2.1.1.5.0", ".1.3.6.1.2.1.1.6.0"})
 	if err != nil {
-		log.WithFields(log.Fields{"error": err}).Error("unable to request")
+		p.log().WithFields(log.Fields{"error": err}).Error("unable to request")
 		return
 	}
 	name, err := result.GetPDU(".1.3.6.1.2.1.1.5.0")
 	if err != nil {
-		log.WithFields(log.Fields{"error": err}).Error("GetPDU sysName failed")
+		p.log().WithFields(log.Fields{"error": err}).Error("GetPDU sysName failed")
 		return
 	}
 	p.Name = name.String()
 
 	location, err := result.GetPDU(".1.3.6.1.2.1.1.6.0")
 	if err != nil {
-		log.WithFields(log.Fields{"error": err}).Error("GetPDU sysLocation failed")
+		p.log().WithFields(log.Fields{"error": err}).Error("GetPDU sysLocation failed")
 		return
 	}
 	p.Location = location.String()
