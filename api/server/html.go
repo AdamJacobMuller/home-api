@@ -161,7 +161,11 @@ func GenericBox(device apimodels.Device) (templates.Box, bool) {
 func (c *Context) Index(rw web.ResponseWriter, req *web.Request) {
 	fmt.Printf("we are in the index\n")
 }
+
 func (c *Context) NotFound(rw web.ResponseWriter, req *web.Request) {
 	rw.WriteHeader(404)
+	if c.Layout == nil {
+		c.Layout = &templates.BasePage{}
+	}
 	c.Layout.Body = &templates.NotFound{}
 }
