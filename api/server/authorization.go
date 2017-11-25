@@ -26,8 +26,12 @@ func (c *Context) Authenticate(w web.ResponseWriter, r *web.Request, next web.Ne
 			}).Error("unable to decode cookie")
 			goto CheckBasicAuth
 		}
-		split := strings.SplitN(string(data), ",", 2)
+		split := strings.SplitN(string(data), ":", 2)
 		if len(split) != 2 {
+			log.WithFields(log.Fields{
+				"split":      split,
+				"len(split)": len(split),
+			}).Error("len(split) != 2")
 			goto CheckBasicAuth
 		}
 		if c.apiserver.Controller.AuthorizeUsernamePassword(split[0], split[1]) {
