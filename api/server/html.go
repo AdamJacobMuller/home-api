@@ -79,7 +79,11 @@ func DeviceToBox(device apimodels.Device) (templates.Box, bool) {
 		case "Z-Wave Switch Binary Root Device":
 			return BinarySwitchBox(device)
 		case "Z-Wave Switch Multilevel":
-			return DimmableSwitchBox(device)
+			if device.HasChildDevice(apimodels.Match{"TypeString": "Z-Wave Switch Multilevel Root Device"}) {
+				return ColorChangeBulbBox(device, true)
+			} else {
+				return DimmableSwitchBox(device)
+			}
 		case "TiVo":
 			return TivoBox(device)
 		case "RedEye":
