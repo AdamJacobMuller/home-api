@@ -486,6 +486,12 @@ func (h *HSController) Load() {
 		case 3:
 			devices[device.ID] = nd
 		case 4:
+			if len(device.Associated_devices) == 0 {
+				log.WithFields(log.Fields{
+					"id": device.ID,
+				}).Error("child device has no associated devices")
+				continue
+			}
 			parent_id := device.Associated_devices[0]
 			pdevice, ok := devices[parent_id]
 			if ok {
@@ -501,7 +507,7 @@ func (h *HSController) Load() {
 			if ok {
 				pdevice.AddChild(device)
 			} else {
-				log.WithFields(log.Fields{"parent_id": parent_id, "id": device.ID}).Fatal("unable to find parent device")
+				log.WithFields(log.Fields{"parent_id": parent_id, "id": device.ID}).Error("unable to find parent device")
 			}
 		}
 	}

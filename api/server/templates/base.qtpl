@@ -1,8 +1,0 @@
-This is a base page template. All the other template pages implement this interface.
-
-Base page implementation. Other pages may inherit from it if they need
-overriding only certain Page methods
-
-
-{% code type NotFound struct {} %}
-{% func (p NotFound) HTML() %}404 file not found{% endfunc %}

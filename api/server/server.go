@@ -101,13 +101,17 @@ func (a *APIServer) Serve() {
 	}
 }
 
+type Context struct {
+	apiserver *APIServer
+}
+
 func NewAPIServer() *APIServer {
 	apiserver := &APIServer{}
 	apiserver.Controller = apicontroller.NewAPIController()
 
 	router := web.New(Context{})
 
-	router.NotFound((*Context).NotFound)
+	//router.NotFound((*Context).NotFound)
 
 	router.Middleware(func(ctx *Context, resp web.ResponseWriter,
 		req *web.Request, next web.NextMiddlewareFunc) {
@@ -142,9 +146,9 @@ func NewAPIServer() *APIServer {
 	router.Middleware(web.StaticMiddlewareFromDir(directory, web.StaticOption{Prefix: "/static", IndexFile: "index.html"}))
 
 	admin := router.Subrouter(Context{}, "/")
-	admin.Middleware((*Context).DrawLayout)
-	admin.Middleware((*Context).AddControllerNavigation)
-	admin.Get("/", (*Context).Index)
+	//admin.Middleware((*Context).DrawLayout)
+	//admin.Middleware((*Context).AddControllerNavigation)
+	//admin.Get("/", (*Context).Index)
 	admin.Get("/room/:LocationTwo/:LocationOne", (*Context).Room)
 
 	api := router.Subrouter(Context{}, "/api")
